@@ -63,6 +63,13 @@ build CMakeFiles/FNF.dir/Arrow.cpp.o: CXX_COMPILER__FNF_unscanned_Debug /Users/z
   OBJECT_DIR = CMakeFiles/FNF.dir
   OBJECT_FILE_DIR = CMakeFiles/FNF.dir
 
+build CMakeFiles/FNF.dir/GameObject.cpp.o: CXX_COMPILER__FNF_unscanned_Debug /Users/zamfirhoria/Desktop/FNFPOO3/Friday-Night-Funkin-POO3/GameObject.cpp || cmake_object_order_depends_target_FNF
+  DEP_FILE = CMakeFiles/FNF.dir/GameObject.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6 -fcolor-diagnostics
+  INCLUDES = -isystem /opt/homebrew/Cellar/sfml/3.0.2/include
+  OBJECT_DIR = CMakeFiles/FNF.dir
+  OBJECT_FILE_DIR = CMakeFiles/FNF.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target FNF
@@ -71,7 +78,7 @@ build CMakeFiles/FNF.dir/Arrow.cpp.o: CXX_COMPILER__FNF_unscanned_Debug /Users/z
 #############################################
 # Link the executable FNF
 
-build FNF: CXX_EXECUTABLE_LINKER__FNF_Debug CMakeFiles/FNF.dir/main.cpp.o CMakeFiles/FNF.dir/Arrow.cpp.o | /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-graphics.3.0.2.dylib /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-audio.3.0.2.dylib /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-window.3.0.2.dylib /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-system.3.0.2.dylib
+build FNF: CXX_EXECUTABLE_LINKER__FNF_Debug CMakeFiles/FNF.dir/main.cpp.o CMakeFiles/FNF.dir/Arrow.cpp.o CMakeFiles/FNF.dir/GameObject.cpp.o | /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-graphics.3.0.2.dylib /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-audio.3.0.2.dylib /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-window.3.0.2.dylib /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-system.3.0.2.dylib
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -mmacosx-version-min=14.6
   LINK_LIBRARIES = -Wl,-rpath,/opt/homebrew/Cellar/sfml/3.0.2/lib  /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-graphics.3.0.2.dylib  /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-audio.3.0.2.dylib  /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-window.3.0.2.dylib  /opt/homebrew/Cellar/sfml/3.0.2/lib/libsfml-system.3.0.2.dylib
   OBJECT_DIR = CMakeFiles/FNF.dir

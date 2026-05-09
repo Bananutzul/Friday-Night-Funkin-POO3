@@ -11,7 +11,8 @@ find_package(SFML 3 COMPONENTS Graphics Audio REQUIRED)
 add_executable(FNF main.cpp
         Arrow.h
         Arrow.cpp
-        GameObject/GameObject.h)
+        GameObject.h
+        GameObject.cpp)
 
 target_include_directories(FNF PRIVATE
         "/opt/homebrew/Cellar/sfml/3.0.2/include"

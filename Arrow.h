@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
-#include "GameObject/GameObject.h"
+#include "GameObject.h"
 
 enum class Direction { LEFT, DOWN, UP, RIGHT};
 

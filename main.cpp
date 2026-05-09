@@ -10,9 +10,18 @@ int main() {
         {400.f, 0.f},           // pozitie initiala
         200.f,                   // viteza
         sf::RectangleShape(),    // shape gol, Arrow il seteaza
-        Direction::DOWN,         // directie
+        Direction::RIGHT,         // directie
         false                    // nu e apasata
     );
+
+    Arrow arrow2(
+    {300.f, 0.f},           // pozitie initiala
+    200.f,                   // viteza
+    sf::RectangleShape(),    // shape gol, Arrow il seteaza
+    Direction::LEFT,         // directie
+    false                    // nu e apasata
+);
+
 
     sf::Clock clock;
 
@@ -25,9 +34,11 @@ int main() {
         }
 
         arrow.update(dt);
+        arrow2.update(dt);
 
         window.clear(sf::Color::Black);
         arrow.draw(window);
+        arrow2.draw(window);
         window.display();
     }
 

@@ -9,16 +9,16 @@ void Arrow::initShape() {
 
         switch(direction) {
             case Direction::LEFT:
-                sprite.setTextureRect(sf::IntRect({10, 10}, {130, 140}));
+                sprite.setTextureRect(sf::IntRect({480, 10}, {140, 150}));
                 break;
             case Direction::DOWN:
-                sprite.setTextureRect(sf::IntRect({1150, 10}, {140, 140}));
+                sprite.setTextureRect(sf::IntRect({1470, 10}, {140, 150}));
                 break;
             case Direction::UP:
-                sprite.setTextureRect(sf::IntRect({10, 993}, {140, 140}));
+                sprite.setTextureRect(sf::IntRect({490, 993}, {145, 150}));
                 break;
             case Direction::RIGHT:
-                sprite.setTextureRect(sf::IntRect({1140, 998}, {140, 140}));
+                sprite.setTextureRect(sf::IntRect({1460, 998}, {140, 150}));
                 break;
         }
 

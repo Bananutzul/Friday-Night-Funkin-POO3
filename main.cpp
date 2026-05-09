@@ -1,21 +1,42 @@
 #include <SFML/Graphics.hpp>
 #include "Arrow.h"
+#include "HoldArrow.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "FNF");
+    sf::RenderWindow window(sf::VideoMode({1200, 600}), "FNF");
     window.setFramerateLimit(60);
 
-    Arrow arrow(
-        {400.f, 600.f},
+    HoldArrow arrow(
+        {550.f, 600.f},
         200.f,
         Direction::RIGHT,
+        false,
+        4,
         false
     );
 
-    Arrow arrow2(
-    {300.f, 600.f},
+    HoldArrow arrow2(
+    {400.f, 600.f},
     200.f,
     Direction::LEFT,
+    false,
+    4,
+    false
+);
+    HoldArrow arrow3(
+    {100.f, 600.f},
+    200.f,
+    Direction::DOWN,
+    false,
+    4,
+    false
+);
+    HoldArrow arrow4(
+    {250.f, 600.f},
+    200.f,
+    Direction::UP,
+    false,
+    4,
     false
 );
 
@@ -32,10 +53,14 @@ int main() {
 
         arrow.update(dt);
         arrow2.update(dt);
+        arrow3.update(dt);
+        arrow4.update(dt);
 
         window.clear(sf::Color::Black);
         arrow.draw(window);
         arrow2.draw(window);
+        arrow3.draw(window);
+        arrow4.draw(window);
         window.display();
     }
 

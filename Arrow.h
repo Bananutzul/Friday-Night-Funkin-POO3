@@ -11,15 +11,15 @@ class Arrow : public GameObject{
 private:
     sf::Vector2f position;
     float speed;
-    sf::RectangleShape shape; // baza sagetii
-    sf::ConvexShape tip; // varful sagetii
+    sf::Texture texture;
+    sf::Sprite sprite{texture};
     Direction direction;
     bool isPressed;
 
     void initShape();
 public:
     Arrow();
-    Arrow(sf::Vector2f, float, sf::RectangleShape, Direction, bool);
+    Arrow(sf::Vector2f, float, Direction, bool);
     Arrow(const Arrow& obj);
     Arrow& operator=(const Arrow& obj);
     virtual ~Arrow();

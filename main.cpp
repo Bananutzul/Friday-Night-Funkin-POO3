@@ -8,16 +8,14 @@ int main() {
     // Creaza o sageata
     Arrow arrow(
         {400.f, 0.f},           // pozitie initiala
-        200.f,                   // viteza
-        sf::RectangleShape(),    // shape gol, Arrow il seteaza
+        200.f,                   // viteza// shape gol, Arrow il seteaza
         Direction::RIGHT,         // directie
         false                    // nu e apasata
     );
 
     Arrow arrow2(
     {300.f, 0.f},           // pozitie initiala
-    200.f,                   // viteza
-    sf::RectangleShape(),    // shape gol, Arrow il seteaza
+    200.f,                 // shape gol, Arrow il seteaza
     Direction::LEFT,         // directie
     false                    // nu e apasata
 );

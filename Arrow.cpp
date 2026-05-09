@@ -70,7 +70,7 @@ Arrow& Arrow::operator=(const Arrow& obj) {
 Arrow::~Arrow() {}
 
 void Arrow::update(float dt) {
-    position.y += speed * dt;
+    position.y -= speed * dt;
     sprite.setPosition(position);
 }
 

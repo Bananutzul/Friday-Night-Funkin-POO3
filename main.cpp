@@ -5,19 +5,18 @@ int main() {
     sf::RenderWindow window(sf::VideoMode({800, 600}), "FNF");
     window.setFramerateLimit(60);
 
-    // Creaza o sageata
     Arrow arrow(
-        {400.f, 0.f},           // pozitie initiala
-        200.f,                   // viteza// shape gol, Arrow il seteaza
-        Direction::RIGHT,         // directie
-        false                    // nu e apasata
+        {400.f, 600.f},
+        200.f,
+        Direction::RIGHT,
+        false
     );
 
     Arrow arrow2(
-    {300.f, 0.f},           // pozitie initiala
-    200.f,                 // shape gol, Arrow il seteaza
-    Direction::LEFT,         // directie
-    false                    // nu e apasata
+    {300.f, 600.f},
+    200.f,
+    Direction::LEFT,
+    false
 );
 
 

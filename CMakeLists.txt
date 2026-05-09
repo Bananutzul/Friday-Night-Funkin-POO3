@@ -12,7 +12,8 @@ add_executable(FNF main.cpp
         Arrow.h
         Arrow.cpp
         GameObject.h
-        GameObject.cpp)
+        GameObject.cpp
+        HoldArrow.h)
 
 target_include_directories(FNF PRIVATE
         "/opt/homebrew/Cellar/sfml/3.0.2/include"

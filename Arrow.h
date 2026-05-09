@@ -8,7 +8,7 @@
 enum class Direction { LEFT, DOWN, UP, RIGHT};
 
 class Arrow : public GameObject{
-private:
+protected:
     sf::Vector2f position;
     float speed;
     sf::Texture texture;

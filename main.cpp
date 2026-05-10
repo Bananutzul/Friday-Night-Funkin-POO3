@@ -8,7 +8,7 @@ int main() {
     window.setFramerateLimit(60);
 
     HoldArrow arrow(
-        {550.f, 600.f},
+        {600.f, 600.f},
         200.f,
         Direction::RIGHT,
         false,
@@ -17,7 +17,7 @@ int main() {
     );
 
     HoldArrow arrow2(
-    {400.f, 600.f},
+    {450.f, 600.f},
     200.f,
     Direction::UP,
     false,
@@ -25,7 +25,7 @@ int main() {
     false
 );
     HoldArrow arrow3(
-    {100.f, 600.f},
+    {150.f, 600.f},
     200.f,
     Direction::LEFT,
     false,
@@ -33,7 +33,7 @@ int main() {
     false
 );
     HoldArrow arrow4(
-    {250.f, 600.f},
+    {300.f, 600.f},
     200.f,
     Direction::DOWN,
     false,

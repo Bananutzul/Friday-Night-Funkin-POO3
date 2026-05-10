@@ -16,13 +16,16 @@ void GameManager::checkHit(Direction dir) {
             targetY = targetZones[(int)dir].getPosition().y;
             offset = abs(noteY - targetY);
 
-            note->setIsPressed(true);
+            if (offset <= 100.f) {
+                note->setIsPressed(true);
 
-            if (offset <= 50.f) {
-                score += 100;
-                combo++;
-            }else
-                combo = 0;
+                if (offset <= 50.f) {
+                    score += 100;
+                    combo++;
+                }else
+                    combo = 0;
+            }
+            break;
         }
     }
 

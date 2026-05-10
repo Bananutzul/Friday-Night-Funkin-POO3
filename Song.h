@@ -13,9 +13,9 @@ private:
     Chart chart;
 public:
     Song();
-    Song(string name, const string& audio_filename, const Chart& chart);
-    Song(const Song& obj);
-    Song& operator=(const Song& obj);
+    Song(string name, const string& audio_filename, const Chart& chart_temp);
+    // Song(const Song& obj);
+    // Song& operator=(const Song& obj); sf::Music nu poate fi copiat, asa ca nu putem folosi copy constr sau operatorul =
 
     void play();
     void stop();

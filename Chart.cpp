@@ -49,6 +49,31 @@ Chart::Chart(const string& filename, const string difficulty) {
     this->difficulty = difficulty;
 }
 
+Chart::Chart(const Chart& obj) {
+    player_notes.erase(player_notes.begin(), player_notes.end());
+    opponent_notes.erase(opponent_notes.begin(), opponent_notes.end());
+
+    player_notes = obj.player_notes;
+    opponent_notes = obj.opponent_notes;
+
+    difficulty = obj.difficulty;
+}
+
+Chart& Chart::operator=(const Chart& obj) {
+    if (this == &obj)
+        return *this;
+
+    player_notes.erase(player_notes.begin(), player_notes.end());
+    opponent_notes.erase(opponent_notes.begin(), opponent_notes.end());
+
+    player_notes = obj.player_notes;
+    opponent_notes = obj.opponent_notes;
+
+    difficulty = obj.difficulty;
+
+    return *this;
+}
+
 vector<Note> Chart::getPlayerNotes() const {
     return player_notes;
 }

@@ -22,6 +22,8 @@ private:
 public:
     Chart();
     Chart(const string& filename, string difficulty);
+    Chart(const Chart& obj);
+    Chart& operator=(const Chart& obj);
 
     vector<Note> getPlayerNotes() const;
     vector<Note> getOpponentNotes() const;

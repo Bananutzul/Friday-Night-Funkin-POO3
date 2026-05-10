@@ -27,4 +27,5 @@ public:
     void update(float dt) override;
     void draw(sf::RenderWindow& window) override;
     void initLine();
+    void setIsHeld(bool val);
 };

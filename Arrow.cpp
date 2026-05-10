@@ -69,6 +69,10 @@ Arrow& Arrow::operator=(const Arrow& obj) {
 
 Arrow::~Arrow() {}
 
+bool Arrow::isOffScreen() {
+    return position.y < 0;
+}
+
 void Arrow::update(float dt) {
     position.y -= speed * dt;
     sprite.setPosition(position);
@@ -78,3 +82,21 @@ void Arrow::draw(sf::RenderWindow& window) {
     sprite.setScale({0.5f, 0.5f});
     window.draw(sprite);
 }
+
+Direction Arrow::getDirection() const {
+    return direction;
+}
+
+sf::Vector2f Arrow::getPosition() const {
+    return position;
+}
+
+void Arrow::setIsPressed(bool val) {
+    isPressed = val;
+}
+
+bool Arrow::getIsPressed() const {
+    return isPressed;
+}
+
+

@@ -34,6 +34,8 @@ public:
     void handleInput(sf::Event event); // pt note normale
     void handleHeldInput(); // pt note de tipul hold
     bool checkHit(Direction dir);
+    void checkHold(Direction dir);
+    void addNote(unique_ptr<Arrow> note);
     void update(float dt);
     void draw(sf::RenderWindow& window);
 };

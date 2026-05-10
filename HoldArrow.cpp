@@ -106,3 +106,8 @@ void HoldArrow::draw(sf::RenderWindow& window) {
     window.draw(sprite);
 }
 
+void HoldArrow::setIsHeld(bool val) {
+    isHeld = val;
+}
+
+

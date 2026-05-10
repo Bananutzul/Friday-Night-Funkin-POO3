@@ -24,6 +24,12 @@ public:
     Arrow& operator=(const Arrow& obj);
     virtual ~Arrow();
 
+    bool isOffScreen();
     void update(float dt) override;
     void draw(sf::RenderWindow& window) override;
+
+    Direction getDirection() const;
+    sf::Vector2f getPosition() const;
+    void setIsPressed(bool val);
+    bool getIsPressed() const;
 };

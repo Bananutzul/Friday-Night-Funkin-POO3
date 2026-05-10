@@ -26,7 +26,7 @@ Chart::Chart(const string& filename, const string difficulty) {
 
             Direction temp_dir;
 
-            switch (d) {
+            switch (d % 4) {
                 case 0:temp_dir = Direction::LEFT;
                     break;
                 case 1:temp_dir = Direction::DOWN;
@@ -35,15 +35,6 @@ Chart::Chart(const string& filename, const string difficulty) {
                     break;
                 case 3:temp_dir = Direction::RIGHT;
                     break;
-                case 4:temp_dir = Direction::LEFT;
-                    break;
-                case 5:temp_dir = Direction::DOWN;
-                    break;
-                case 6:temp_dir = Direction::UP;
-                    break;
-                case 7:temp_dir = Direction::RIGHT;
-                    break;
-
             }
 
             float duration = note.contains("l") ? note["l"].get<float>() : 0.f;

@@ -49,6 +49,7 @@ public:
     void update(float dt);
     void draw(sf::RenderWindow& window);
     void loadSong(unique_ptr<Song> song);
+    void spawnNotes();
 
     int getScore() const;
     int getCombo() const;

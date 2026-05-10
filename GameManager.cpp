@@ -197,11 +197,66 @@ void GameManager::loadSong(unique_ptr<Song> song) {
 
     nextPlayerNote = 0;
     nextOpponentNote = 0;
-    //
-    // arrows.clear();
+
+    arrows.clear();
 
     score = 0;
     combo = 0;
 
     curr_song->play();
+}
+
+void GameManager::spawnNotes() {
+    float current_timeMs = curr_song->getTimeMs();
+    travelTime = 550.f / 200.f * 1000.f;
+
+    while (nextPlayerNote < playerNotes.size()) {
+        auto& note = playerNotes[nextPlayerNote];
+
+        if (current_timeMs >= note.time - travelTime) {
+            cout << "Spawn Note Now" << travelTime << endl;
+
+            float x;
+
+            switch (note.direction) {
+                case Direction::LEFT: x = 650.f;break;
+                case Direction::DOWN: x = 800.f;break;
+                case Direction::UP: x = 950.f;break;
+                case Direction::RIGHT: x = 1100.f;break;
+            }
+
+            if (note.duration > 0) {
+                arrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, true, note.duration / 1000.f, false));
+            }else {
+                arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, true));
+            }
+
+            nextPlayerNote++;
+        }else break;
+    }
+
+    while (nextOpponentNote < opponentNotes.size()) {
+        auto& note = opponentNotes[nextOpponentNote];
+
+        if (current_timeMs >= note.time - travelTime) {
+            cout << "Spawn Note Now" << travelTime << endl;
+
+            float x;
+
+            switch (note.direction) {
+                case Direction::LEFT: x = 100.f;break;
+                case Direction::DOWN: x = 250.f;break;
+                case Direction::UP: x = 400.f;break;
+                case Direction::RIGHT: x = 650.f;break;
+            }
+
+            if (note.duration > 0) {
+                arrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, false, note.duration / 1000.f, false));
+            }else {
+                arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, false));
+            }
+
+            nextOpponentNote++;
+        }else break;
+    }
 }

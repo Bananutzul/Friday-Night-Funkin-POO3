@@ -17,16 +17,17 @@ using namespace std;
 class GameManager{
 private:
     GameManager() {
-        targetZones[0] = Arrow({100.f, 0.f}, 0.f, Direction::LEFT, false);
-        targetZones[1] = Arrow({250.f, 0.f}, 0.f, Direction::DOWN, false);
-        targetZones[2] = Arrow({400.f, 0.f}, 0.f, Direction::UP, false);
-        targetZones[3] = Arrow({550.f, 0.f}, 0.f, Direction::RIGHT, false);
+        targetZones[0] = Arrow({650.f, 0.f}, 0.f, Direction::LEFT, false, false);
+        targetZones[1] = Arrow({800.f, 0.f}, 0.f, Direction::DOWN, false, false);
+        targetZones[2] = Arrow({950.f, 0.f}, 0.f, Direction::UP, false, false);
+        targetZones[3] = Arrow({1100.f, 0.f}, 0.f, Direction::RIGHT, false, false);
     }
     static GameManager* instance;
     vector<unique_ptr<Arrow>> arrows;
     Arrow targetZones[4];
     int score = 0;
     int combo = 0;
+    float travelTime = 550 / 1.6 * 1000.f;
 
     vector<Note> playerNotes;
     vector<Note> opponentNotes;

@@ -145,6 +145,54 @@ void GameManager::releaseHold(Direction dir) {
 }
 
 void GameManager::update(float dt) {
+    if (curr_song) {
+        float curr_timeMs = curr_song->getTimeMs();
+
+        while (nextPlayerNote < playerNotes.size()) {
+            if (curr_timeMs >= (playerNotes[nextPlayerNote].time - travelTime)) {
+                auto& note = playerNotes[nextPlayerNote];
+                float x = 150.f;
+
+                switch (note.direction) {
+                    case Direction::LEFT: x = 650.f;break;
+                    case Direction::DOWN: x = 800.f;break;
+                    case Direction::UP: x = 950.f;break;
+                    case Direction::RIGHT: x = 1100.f;break;
+                }
+
+                if (note.duration > 0) {
+                    arrows.push_back(make_unique<HoldArrow>(sf::Vector2f{x, 600.f}, 200.f * 1.6, note.direction, false, note.duration / 1000.f, true));
+                }else {
+                    arrows.push_back(make_unique<Arrow>(sf::Vector2f{x, 600.f}, 200.f * 1.6, note.direction, false, true));
+                }
+
+                nextPlayerNote++;
+            }else break;
+        }
+
+        while (nextOpponentNote < opponentNotes.size()) {
+            if (curr_timeMs >= (opponentNotes[nextOpponentNote].time - travelTime)) {
+                auto& note = opponentNotes[nextOpponentNote];
+                float x = 150.f;
+
+                switch (note.direction) {
+                    case Direction::LEFT: x = 150.f;break;
+                    case Direction::DOWN: x = 300.f;break;
+                    case Direction::UP: x = 450.f;break;
+                    case Direction::RIGHT: x = 600.f;break;
+                }
+
+                if (note.duration > 0) {
+                    arrows.push_back(make_unique<HoldArrow>(sf::Vector2f{x, 600.f}, 200.f * 1.6, note.direction, false, note.duration / 1000.f, false));
+                }else {
+                    arrows.push_back(make_unique<Arrow>(sf::Vector2f{x, 600.f}, 200.f * 1.6, note.direction, false, false));
+                }
+
+                nextOpponentNote++;
+            }else break;
+        }
+    }
+
     handleHeldInput();
 
     for (auto& note : arrows) {

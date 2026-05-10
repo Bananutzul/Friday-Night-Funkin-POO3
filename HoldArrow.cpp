@@ -1,4 +1,3 @@
-#pragma once
 
 #include "HoldArrow.h"
 #include <SFML/Graphics.hpp>
@@ -55,7 +54,7 @@ HoldArrow::HoldArrow() : Arrow(){
 }
 
 HoldArrow::HoldArrow(sf::Vector2f position, float speed,
-    Direction direction, bool isPressed, float duration, bool isHeld) : Arrow(position, speed, direction, isPressed){
+    Direction direction, bool isPressed, float duration, bool isHeld) : Arrow(position, speed, direction, isPressed, true){
 
     line_position = position;
     this->duration = duration;

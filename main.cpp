@@ -4,49 +4,53 @@
 #include "GameManager.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({1200, 600}), "FNF");
+    sf::RenderWindow window(sf::VideoMode({1500, 600}), "FNF");
     window.setFramerateLimit(60);
 
-    HoldArrow arrow(
-        {600.f, 600.f},
-        200.f,
-        Direction::RIGHT,
-        false,
-        2,
-        false
-    );
-
-    HoldArrow arrow2(
-    {450.f, 600.f},
-    200.f,
-    Direction::UP,
-    false,
-    4,
-    false
-);
-    HoldArrow arrow3(
-    {150.f, 600.f},
-    200.f,
-    Direction::LEFT,
-    false,
-    4,
-    false
-);
-    HoldArrow arrow4(
-    {300.f, 600.f},
-    200.f,
-    Direction::DOWN,
-    false,
-    4,
-    false
-);
+//     HoldArrow arrow(
+//         {600.f, 600.f},
+//         200.f * 1.6,
+//         Direction::RIGHT,
+//         false,
+//         2,
+//         false
+//     );
+//
+//     HoldArrow arrow2(
+//     {450.f, 600.f},
+//     200.f * 1.6,
+//     Direction::UP,
+//     false,
+//     4,
+//     false
+// );
+//     HoldArrow arrow3(
+//     {150.f, 600.f},
+//     200.f * 1.6,
+//     Direction::LEFT,
+//     false,
+//     4,
+//     false
+// );
+//     HoldArrow arrow4(
+//     {300.f, 600.f},
+//     200.f * 1.6,
+//     Direction::DOWN,
+//     false,
+//     4,
+//     false
+// );
 
     GameManager* gm = GameManager::getInstance();
 
-    gm->addNote(make_unique<HoldArrow>(arrow));
-    gm->addNote(make_unique<Arrow>(arrow2));
-    gm->addNote(make_unique<Arrow>(arrow3));
-    gm->addNote(make_unique<Arrow>(arrow4));
+    // gm->addNote(make_unique<HoldArrow>(arrow));
+    // gm->addNote(make_unique<Arrow>(arrow2));
+    // gm->addNote(make_unique<Arrow>(arrow3));
+    // gm->addNote(make_unique<Arrow>(arrow4));
+
+    Chart chart("bopeebo-chart.json", "hard");
+    auto song = make_unique<Song>("Bopeebo", "bopeebo.mp3", chart);
+    gm->loadSong(std::move(song));
 
     sf::Clock clock;
 

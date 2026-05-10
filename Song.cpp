@@ -20,8 +20,19 @@ Song::Song(string name, const string& audio_filename, const Chart& chart_temp) {
     try {
         if (!audio_file.openFromFile(audio_filename))
             throw InvalidOptionException("File not available!");
-        audio_file.openFromFile(audio_filename);
     } catch (const InvalidOptionException& e) {
         cout << "ERROR: " << e.what() << '\n';
     }
-    }
+}
+
+void Song::play() {
+    audio_file.play();
+}
+
+void Song::stop() {
+    audio_file.stop();
+}
+
+float Song::getTimeMs() {
+    return audio_file.getPlayingOffset().asMilliseconds();
+}

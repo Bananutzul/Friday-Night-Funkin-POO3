@@ -14,6 +14,7 @@ private:
     sf::Vector2f line_position = position;
     float duration;
     bool isHeld;
+    bool miss = false;
     float current_time_held = 0.f;
     float tileHeight = 20.f;
     sf::Texture line_texture;
@@ -27,11 +28,13 @@ public:
     virtual ~HoldArrow();
 
     bool isFinished();
-    void update(float dt, float targetY);
+    void update(float dt) override;
     void updateLine(float dt);
     void draw(sf::RenderWindow& window) override;
     void initLine();
     void setIsHeld(bool val);
+    bool isMiss() const;
+    void setMiss(bool val);
     bool getIsHeld() const;
     void updateHeldTimer(float dt);
 };

@@ -33,7 +33,7 @@ public:
 
     void handleInput(sf::Event event); // pt note normale
     void handleHeldInput(); // pt note de tipul hold
-    bool checkHit(Direction dir);
+    void checkHit(Direction dir);
     void checkHold(Direction dir);
     void releaseHold(Direction dir);
     void addNote(unique_ptr<Arrow> note);

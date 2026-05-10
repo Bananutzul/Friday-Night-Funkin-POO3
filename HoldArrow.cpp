@@ -72,7 +72,7 @@ HoldArrow::HoldArrow(const HoldArrow &obj) : Arrow(obj){
 
 HoldArrow::~HoldArrow(){};
 
-void HoldArrow::update(float dt, float targetY) {
+void HoldArrow::update(float dt) {
     if (!isHeld) {
         position.y -= speed * dt;
     }else {
@@ -80,9 +80,6 @@ void HoldArrow::update(float dt, float targetY) {
     }
 
     line_position.y -= speed * dt;
-
-    if (lineTiles.empty() == false && line_position.y <= targetY)
-        lineTiles.erase(lineTiles.begin());
 
     sprite.setPosition(position);
     updateLine(dt);
@@ -116,5 +113,12 @@ void HoldArrow::updateHeldTimer(float dt) {
     current_time_held += dt;
 }
 
+void HoldArrow::setMiss(bool val) {
+    miss = val;
+}
+
+bool HoldArrow::isMiss() const {
+    return miss;
+}
 
 

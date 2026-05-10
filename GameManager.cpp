@@ -6,7 +6,7 @@ using namespace std;
 
 GameManager* GameManager::instance = nullptr;
 
-bool GameManager::checkHit(Direction dir) {
+void GameManager::checkHit(Direction dir) {
     for (auto& note : arrows) {
         if (note->getDirection() == dir) {
             float noteY, targetY, offset;
@@ -15,14 +15,16 @@ bool GameManager::checkHit(Direction dir) {
             targetY = targetZones[(int)dir].getPosition().y;
             offset = abs(noteY - targetY);
 
+            note->setIsPressed(true);
+
             if (offset <= 50.f) {
-                note->setIsPressed(true);
-                return true;
-            }
+                score += 100;
+                combo++;
+            }else
+                combo = 0;
         }
     }
 
-    return false;
 }
 
 void GameManager::checkHold(Direction dir) {
@@ -41,6 +43,8 @@ void GameManager::checkHold(Direction dir) {
                 hold->setIsHeld(true);
                 score += 50;
                 combo++;
+            }else {
+                hold->setMiss(true);
             }
         }
     }
@@ -94,11 +98,7 @@ void GameManager::handleInput(sf::Event event) {
             }
 
         if (!isHoldNote)
-            if (checkHit(dir)) {
-                score += 100, combo++;
-            }
-            else
-                combo = 0;
+            checkHit(dir);
         }
     }
 
@@ -145,14 +145,9 @@ void GameManager::update(float dt) {
 
     for (auto& note : arrows) {
         auto hold = dynamic_cast<HoldArrow*>(note.get());
-        //
-        // if (hold && hold->getIsHeld()) {
-        //     hold->updateHeldTimer(dt);
-        // }
 
         if (hold) {
-            float targetY = targetZones[(int)hold->getDirection()].getPosition().y;
-            hold->update(dt, targetY);
+            hold->update(dt);
         }else
             note->update(dt);
     }
@@ -163,7 +158,7 @@ void GameManager::update(float dt) {
                 auto hold = dynamic_cast<HoldArrow*>(notes.get());
 
                 if (hold)
-                    return hold->isFinished();
+                    return hold->isFinished() || hold->isMiss();
                 else
                     return notes->isOffScreen() || notes->getIsPressed();
             }), arrows.end()); // stergem notele care au iesit de pe ecran

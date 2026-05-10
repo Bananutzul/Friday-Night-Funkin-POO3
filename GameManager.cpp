@@ -4,6 +4,8 @@
 
 using namespace std;
 
+GameManager* GameManager::instance = nullptr;
+
 bool GameManager::checkHit(Direction dir) {
     for (auto& note : arrows) {
         if (note->getDirection() == dir) {
@@ -109,4 +111,12 @@ void GameManager::draw(sf::RenderWindow& window) {
 
 void GameManager::addNote(unique_ptr<Arrow> note) {
     arrows.push_back(std::move(note));
+}
+
+int GameManager::getScore() const {
+    return score;
+}
+
+int GameManager::getCombo() const {
+    return combo;
 }

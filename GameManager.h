@@ -38,4 +38,7 @@ public:
     void addNote(unique_ptr<Arrow> note);
     void update(float dt);
     void draw(sf::RenderWindow& window);
+
+    int getScore() const;
+    int getCombo() const;
 };

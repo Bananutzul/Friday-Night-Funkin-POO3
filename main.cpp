@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Arrow.h"
 #include "HoldArrow.h"
+#include "GameManager.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode({1200, 600}), "FNF");
@@ -40,8 +41,26 @@ int main() {
     false
 );
 
+    GameManager* gm = GameManager::getInstance();
+
+    gm->addNote(make_unique<Arrow>(arrow));
+    gm->addNote(make_unique<Arrow>(arrow2));
+    gm->addNote(make_unique<Arrow>(arrow3));
+    gm->addNote(make_unique<Arrow>(arrow4));
 
     sf::Clock clock;
+
+    sf::Font font;
+    font.openFromFile("font.ttf");
+
+    sf::Text scoreText(font), comboText(font);
+    scoreText.setCharacterSize(24);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition({10.f, 10.f});
+    comboText.setCharacterSize(24);
+    comboText.setFillColor(sf::Color::White);
+    comboText.setPosition({10.f, 40.f});
+
 
     while (window.isOpen()) {
         float dt = clock.restart().asSeconds();
@@ -49,18 +68,20 @@ int main() {
         while (const auto event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>())
                 window.close();
+
+            gm->handleInput(*event);
         }
 
-        arrow.update(dt);
-        arrow2.update(dt);
-        arrow3.update(dt);
-        arrow4.update(dt);
+        gm->update(dt);
 
         window.clear(sf::Color::Black);
-        arrow.draw(window);
-        arrow2.draw(window);
-        arrow3.draw(window);
-        arrow4.draw(window);
+        gm->draw(window);
+
+        scoreText.setString("Score: " + to_string(gm->getScore()));
+        comboText.setString("Combo: " + to_string(gm->getCombo()));
+
+        window.draw(scoreText);
+        window.draw(comboText);
         window.display();
     }
 

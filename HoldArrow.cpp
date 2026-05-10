@@ -38,16 +38,28 @@ void HoldArrow::initLine() {
 
         switch(direction) {
             case Direction::LEFT:
-                tile.setTextureRect(sf::IntRect({640, 10}, {36, 45}));
+                if (i != numTiles - 1)
+                    tile.setTextureRect(sf::IntRect({640, 10}, {36, 45}));
+                else
+                    tile.setTextureRect(sf::IntRect({697, 10}, {36, 45}));
                 break;
             case Direction::DOWN:
-                tile.setTextureRect(sf::IntRect({1639, 10}, {36, 45}));
+                if (i != numTiles - 1)
+                    tile.setTextureRect(sf::IntRect({1639, 10}, {36, 45}));
+                else
+                    tile.setTextureRect(sf::IntRect({1692, 10}, {36, 45}));
                 break;
             case Direction::UP:
-                tile.setTextureRect(sf::IntRect({658, 995}, {36, 45}));
+                if (i != numTiles - 1)
+                    tile.setTextureRect(sf::IntRect({658, 995}, {36, 45}));
+                else
+                    tile.setTextureRect(sf::IntRect({714, 995}, {36, 45}));
                 break;
             case Direction::RIGHT:
-                tile.setTextureRect(sf::IntRect({1629, 1000}, {36, 45}));
+                if (i != numTiles - 1)
+                    tile.setTextureRect(sf::IntRect({1629, 1000}, {36, 45}));
+                else
+                    tile.setTextureRect(sf::IntRect({1682, 1000}, {36, 45}));
                 break;
         }
 

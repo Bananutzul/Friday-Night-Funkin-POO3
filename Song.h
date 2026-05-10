@@ -9,11 +9,13 @@ using namespace std;
 class Song {
 private:
     string name;
-    sf::Music audio_file;
+    sf::Music instrumental;
+    sf::Music bfVoice;
+    sf::Music dadVoice;
     Chart chart;
 public:
     Song();
-    Song(string name, const string& audio_filename, const Chart& chart_temp);
+    Song(string name, const string& instr, const string& bf, const string& dad, const Chart& chart_temp);
     // Song(const Song& obj);
     // Song& operator=(const Song& obj); sf::Music nu poate fi copiat, asa ca nu putem folosi copy constr sau operatorul =
 

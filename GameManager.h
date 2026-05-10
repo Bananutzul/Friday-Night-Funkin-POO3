@@ -27,7 +27,7 @@ private:
     Arrow targetZones[4];
     int score = 0;
     int combo = 0;
-    float travelTime = 550 / 1.6 * 1000.f;
+    float travelTime = 550 / 200.f * 1000.f;
 
     vector<Note> playerNotes;
     vector<Note> opponentNotes;

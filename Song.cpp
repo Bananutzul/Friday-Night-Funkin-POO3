@@ -13,32 +13,42 @@ Song::Song() {
     name = "N/A";
 }
 
-Song::Song(string name, const string& audio_filename, const Chart& chart_temp) {
+Song::Song(string name, const string& instr, const string& bf, const string& dad, const Chart& chart_temp) {
     this->name = name;
     chart = chart_temp;
 
     try {
-        if (!audio_file.openFromFile(audio_filename))
-            throw InvalidOptionException("File not available!");
+        if (!instrumental.openFromFile(instr))
+            throw InvalidOptionException("Instrumental File not available!");
+
+        if (!bfVoice.openFromFile(bf))
+            throw InvalidOptionException("BF File not available!");
+
+        if (!dadVoice.openFromFile(dad))
+            throw InvalidOptionException("Dad File not available!");
     } catch (const InvalidOptionException& e) {
         cout << "ERROR: " << e.what() << '\n';
     }
 }
 
 void Song::play() {
-    audio_file.play();
+    instrumental.play();
+    bfVoice.play();
+    dadVoice.play();
 }
 
 void Song::stop() {
-    audio_file.stop();
+    instrumental.stop();
+    bfVoice.stop();
+    dadVoice.stop();
 }
 
 float Song::getTimeMs() {
-    return audio_file.getPlayingOffset().asMilliseconds();
+    return instrumental.getPlayingOffset().asMilliseconds();
 }
 
 bool Song::isPlaying() {
-    return audio_file.getStatus() == sf::Music::Status::Playing;
+    return instrumental.getStatus() == sf::Music::Status::Playing;
 }
 
 Chart Song::getChart() const {

@@ -53,7 +53,7 @@ int main() {
     gm->addNote(make_unique<Arrow>(arrow4));
 
     Chart chart("bopeebo-chart.json", "hard");
-    auto song = make_unique<Song>("Bopeebo", "bopeebo.mp3", chart);
+    auto song = make_unique<Song>("Bopeebo", "Inst.ogg", "Voices-bf.ogg", "Voices-dad.ogg", chart);
     gm->loadSong(std::move(song));
 
     auto playerNotes = chart.getPlayerNotes();

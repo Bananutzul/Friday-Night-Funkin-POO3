@@ -22,8 +22,8 @@ private:
     static GameManager* instance;
     vector<unique_ptr<Arrow>> arrows;
     Arrow targetZones[4];
-    int score;
-    int combo;
+    int score = 0;
+    int combo = 0;
 public:
     static GameManager* getInstance() {
         if (instance == nullptr)
@@ -35,6 +35,7 @@ public:
     void handleHeldInput(); // pt note de tipul hold
     bool checkHit(Direction dir);
     void checkHold(Direction dir);
+    void releaseHold(Direction dir);
     void addNote(unique_ptr<Arrow> note);
     void update(float dt);
     void draw(sf::RenderWindow& window);

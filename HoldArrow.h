@@ -11,8 +11,10 @@ using namespace std;
 
 class HoldArrow : public Arrow {
 private:
+    sf::Vector2f line_position = position;
     float duration;
     bool isHeld;
+    float current_time_held = 0.f;
     float tileHeight = 20.f;
     sf::Texture line_texture;
     sf::Sprite line_sprite{line_texture}; // e nevoie de line_texture ca sa initializam line_sprite cu ceva
@@ -24,8 +26,12 @@ public:
     HoldArrow& operator=(const HoldArrow& obj);
     virtual ~HoldArrow();
 
-    void update(float dt) override;
+    bool isFinished();
+    void update(float dt, float targetY);
+    void updateLine(float dt);
     void draw(sf::RenderWindow& window) override;
     void initLine();
     void setIsHeld(bool val);
+    bool getIsHeld() const;
+    void updateHeldTimer(float dt);
 };

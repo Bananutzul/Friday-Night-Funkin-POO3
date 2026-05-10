@@ -37,8 +37,11 @@ void GameManager::checkHold(Direction dir) {
 
             offset = abs(noteY - targetY);
 
-            if (offset <= 50.f)
+            if (offset <= 50.f) {
                 hold->setIsHeld(true);
+                score += 50;
+                combo++;
+            }
         }
     }
 }
@@ -77,13 +80,63 @@ void GameManager::handleInput(sf::Event event) {
                 break;
         }
 
-        if (valid)
+        if (valid){
+
+            bool isHoldNote = false;
+
+            for (auto& note : arrows) {
+                auto hold = dynamic_cast<HoldArrow*>(note.get());
+
+                if (hold && hold->getDirection() == dir) {
+                    isHoldNote = true;
+                    break;
+                }
+            }
+
+        if (!isHoldNote)
             if (checkHit(dir)) {
                 score += 100, combo++;
             }
             else
                 combo = 0;
+        }
+    }
 
+    if (const auto& keyEvent = event.getIf<sf::Event::KeyReleased>()) {
+        Direction dir;
+        bool valid = true;
+
+        switch (keyEvent->code) {
+            case sf::Keyboard::Key::A:
+                dir = Direction::LEFT;
+                break;
+            case sf::Keyboard::Key::S:
+                dir = Direction::DOWN;
+                break;
+            case sf::Keyboard::Key::W:
+                dir = Direction::UP;
+                break;
+            case sf::Keyboard::Key::D:
+                dir = Direction::RIGHT;
+                break;
+            default:
+                valid = false;
+                break;
+        }
+
+        if (valid) {
+            releaseHold(dir);
+            combo = 0;
+        }
+    }
+}
+
+void GameManager::releaseHold(Direction dir) {
+    for (auto& note : arrows) {
+        auto hold = dynamic_cast<HoldArrow*>(note.get());
+
+        if (hold && hold->getDirection() == dir)
+            hold->setIsHeld(false);
     }
 }
 
@@ -91,12 +144,28 @@ void GameManager::update(float dt) {
     handleHeldInput();
 
     for (auto& note : arrows) {
-        note->update(dt);
+        auto hold = dynamic_cast<HoldArrow*>(note.get());
+        //
+        // if (hold && hold->getIsHeld()) {
+        //     hold->updateHeldTimer(dt);
+        // }
+
+        if (hold) {
+            float targetY = targetZones[(int)hold->getDirection()].getPosition().y;
+            hold->update(dt, targetY);
+        }else
+            note->update(dt);
     }
 
     arrows.erase(
         remove_if(arrows.begin(), arrows.end(),
-            [](const unique_ptr<Arrow>& notes) { return notes->isOffScreen() || notes->getIsPressed();
+            [](const unique_ptr<Arrow>& notes) {
+                auto hold = dynamic_cast<HoldArrow*>(notes.get());
+
+                if (hold)
+                    return hold->isFinished();
+                else
+                    return notes->isOffScreen() || notes->getIsPressed();
             }), arrows.end()); // stergem notele care au iesit de pe ecran
 }
 

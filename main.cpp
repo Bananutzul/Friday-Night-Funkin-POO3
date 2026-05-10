@@ -12,14 +12,14 @@ int main() {
         200.f,
         Direction::RIGHT,
         false,
-        4,
+        2,
         false
     );
 
     HoldArrow arrow2(
     {400.f, 600.f},
     200.f,
-    Direction::LEFT,
+    Direction::UP,
     false,
     4,
     false
@@ -27,7 +27,7 @@ int main() {
     HoldArrow arrow3(
     {100.f, 600.f},
     200.f,
-    Direction::DOWN,
+    Direction::LEFT,
     false,
     4,
     false
@@ -35,7 +35,7 @@ int main() {
     HoldArrow arrow4(
     {250.f, 600.f},
     200.f,
-    Direction::UP,
+    Direction::DOWN,
     false,
     4,
     false
@@ -43,7 +43,7 @@ int main() {
 
     GameManager* gm = GameManager::getInstance();
 
-    gm->addNote(make_unique<Arrow>(arrow));
+    gm->addNote(make_unique<HoldArrow>(arrow));
     gm->addNote(make_unique<Arrow>(arrow2));
     gm->addNote(make_unique<Arrow>(arrow3));
     gm->addNote(make_unique<Arrow>(arrow4));

@@ -5,28 +5,6 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
-// void HoldArrow::initLine() {
-//     line_texture.loadFromFile("arrows.png");
-//     line_sprite = sf::Sprite(line_texture);
-//
-//     switch(direction) {
-//         case Direction::LEFT:
-//             line_sprite.setTextureRect(sf::IntRect({670, 50}, {50, 50}));
-//             break;
-//         case Direction::DOWN:
-//             line_sprite.setTextureRect(sf::IntRect({1650, 50}, {50, 50}));
-//             break;
-//         case Direction::UP:
-//             line_sprite.setTextureRect(sf::IntRect({670, 943}, {50, 50}));
-//             break;
-//         case Direction::RIGHT:
-//             line_sprite.setTextureRect(sf::IntRect({1650, 943}, {50, 50}));
-//             break;
-//     }
-//
-//     line_sprite.setPosition({position.x, position.y + 40.f});
-// }
-
 void HoldArrow::initLine() {
     line_texture.loadFromFile("arrows.png");
 
@@ -70,6 +48,7 @@ void HoldArrow::initLine() {
 }
 
 HoldArrow::HoldArrow() : Arrow(){
+    line_position = position;
     duration = 0;
     isHeld = false;
     initLine();
@@ -78,12 +57,14 @@ HoldArrow::HoldArrow() : Arrow(){
 HoldArrow::HoldArrow(sf::Vector2f position, float speed,
     Direction direction, bool isPressed, float duration, bool isHeld) : Arrow(position, speed, direction, isPressed){
 
+    line_position = position;
     this->duration = duration;
     this->isHeld = isHeld;
     initLine();
 }
 
 HoldArrow::HoldArrow(const HoldArrow &obj) : Arrow(obj){
+    line_position = position;
     duration = obj.duration;
     isHeld = obj.isHeld;
     initLine();
@@ -91,12 +72,25 @@ HoldArrow::HoldArrow(const HoldArrow &obj) : Arrow(obj){
 
 HoldArrow::~HoldArrow(){};
 
-void HoldArrow::update(float dt) {
-    position.y -= speed * dt;
-    for (int i = 0; i < lineTiles.size(); i++) {
-        lineTiles[i].setPosition({position.x + 28.f, position.y + 40.f + i * tileHeight});
+void HoldArrow::update(float dt, float targetY) {
+    if (!isHeld) {
+        position.y -= speed * dt;
+    }else {
+        current_time_held += dt;
     }
+
+    line_position.y -= speed * dt;
+
+    if (lineTiles.empty() == false && line_position.y <= targetY)
+        lineTiles.erase(lineTiles.begin());
+
     sprite.setPosition(position);
+    updateLine(dt);
+}
+
+void HoldArrow::updateLine(float dt) {
+    for (int i = 0; i < lineTiles.size(); i++)
+        lineTiles[i].setPosition({line_position.x + 28.f, line_position.y + 40.f + i * tileHeight});
 }
 
 void HoldArrow::draw(sf::RenderWindow& window) {
@@ -109,5 +103,18 @@ void HoldArrow::draw(sf::RenderWindow& window) {
 void HoldArrow::setIsHeld(bool val) {
     isHeld = val;
 }
+
+bool HoldArrow::isFinished() {
+    return current_time_held >= duration;
+}
+
+bool HoldArrow::getIsHeld() const {
+    return isHeld;
+}
+
+void HoldArrow::updateHeldTimer(float dt) {
+    current_time_held += dt;
+}
+
 
 

@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include <cmath>
 #include <iostream>
+#include <memory>
 
 using namespace std;
 
@@ -62,6 +63,7 @@ void GameManager::handleHeldInput() {
 }
 
 void GameManager::handleInput(sf::Event event) {
+
     if (const auto& keyEvent = event.getIf<sf::Event::KeyPressed>()) {
         Direction dir;
         bool valid = true;
@@ -89,11 +91,13 @@ void GameManager::handleInput(sf::Event event) {
             bool isHoldNote = false;
 
             for (auto& note : arrows) {
-                auto hold = dynamic_cast<HoldArrow*>(note.get());
+                if (note->getIsPlayerNote()) {
+                    auto hold = dynamic_cast<HoldArrow*>(note.get());
 
-                if (hold && hold->getDirection() == dir) {
-                    isHoldNote = true;
-                    break;
+                    if (hold && hold->getDirection() == dir) {
+                        isHoldNote = true;
+                        break;
+                    }
                 }
             }
 
@@ -183,4 +187,21 @@ int GameManager::getScore() const {
 
 int GameManager::getCombo() const {
     return combo;
+}
+
+void GameManager::loadSong(unique_ptr<Song> song) {
+    curr_song = std::move(song);
+
+    playerNotes = curr_song->getChart().getPlayerNotes();
+    opponentNotes = curr_song->getChart().getOpponentNotes();
+
+    nextPlayerNote = 0;
+    nextOpponentNote = 0;
+
+    arrows.clear();
+
+    score = 0;
+    combo = 0;
+
+    curr_song->play();
 }

@@ -20,4 +20,7 @@ public:
     void play();
     void stop();
     float getTimeMs();
+    bool isPlaying();
+    Chart getChart() const;
+    string getName() const;
 };

@@ -2,11 +2,14 @@
 
 #include <iostream>
 #include <memory>
+#include <cstring>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <vector>
 #include "Arrow.h"
+#include "Chart.h"
+#include "Song.h"
 #include "HoldArrow.h"
 
 using namespace std;
@@ -24,6 +27,11 @@ private:
     Arrow targetZones[4];
     int score = 0;
     int combo = 0;
+
+    vector<Note> playerNotes;
+    vector<Note> opponentNotes;
+    unique_ptr<Song> curr_song;
+    int nextPlayerNote = 0, nextOpponentNote = 0; // indexi prin care tinem minte urmatoarea nota pe care trebuie sa o afisam
 public:
     static GameManager* getInstance() {
         if (instance == nullptr)
@@ -39,6 +47,7 @@ public:
     void addNote(unique_ptr<Arrow> note);
     void update(float dt);
     void draw(sf::RenderWindow& window);
+    void loadSong(unique_ptr<Song> song);
 
     int getScore() const;
     int getCombo() const;

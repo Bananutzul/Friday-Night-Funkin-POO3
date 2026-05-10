@@ -15,11 +15,12 @@ protected:
     sf::Sprite sprite{texture};
     Direction direction;
     bool isPressed;
+    bool isPlayerNote;
 
     void initShape();
 public:
     Arrow();
-    Arrow(sf::Vector2f, float, Direction, bool);
+    Arrow(sf::Vector2f, float, Direction, bool, bool);
     Arrow(const Arrow& obj);
     Arrow& operator=(const Arrow& obj);
     virtual ~Arrow();
@@ -32,4 +33,5 @@ public:
     sf::Vector2f getPosition() const;
     void setIsPressed(bool val);
     bool getIsPressed() const;
+    bool getIsPlayerNote() const;
 };

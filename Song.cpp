@@ -36,3 +36,16 @@ void Song::stop() {
 float Song::getTimeMs() {
     return audio_file.getPlayingOffset().asMilliseconds();
 }
+
+bool Song::isPlaying() {
+    return audio_file.getStatus() == sf::Music::Status::Playing;
+}
+
+Chart Song::getChart() const {
+    return chart;
+}
+
+string Song::getName() const {
+    return name;
+}
+

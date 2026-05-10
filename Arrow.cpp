@@ -34,15 +34,17 @@ Arrow::Arrow() {
     direction = Direction::DOWN;
 
     isPressed = false;
+    isPlayerNote = false;
 
     initShape();
 }
 
-Arrow::Arrow(sf::Vector2f position, float speed, Direction direction, bool isPressed) {
+Arrow::Arrow(sf::Vector2f position, float speed, Direction direction, bool isPressed, bool isPlayer) {
     this->position = position;
     this->speed = speed;
     this->direction = direction;
     this->isPressed = isPressed;
+    isPlayerNote = isPlayer;
     this->initShape();
 }
 
@@ -51,6 +53,7 @@ Arrow::Arrow(const Arrow& obj) {
     speed = obj.speed;
     direction = obj.direction;
     isPressed = obj.isPressed;
+    isPlayerNote = obj.isPlayerNote;
     initShape();
 }
 
@@ -62,6 +65,7 @@ Arrow& Arrow::operator=(const Arrow& obj) {
     speed = obj.speed;
     direction = obj.direction;
     isPressed = obj.isPressed;
+    isPlayerNote = obj.isPlayerNote;
     initShape();
 
     return *this;
@@ -97,6 +101,10 @@ void Arrow::setIsPressed(bool val) {
 
 bool Arrow::getIsPressed() const {
     return isPressed;
+}
+
+bool Arrow::getIsPlayerNote() const {
+    return isPlayerNote;
 }
 
 

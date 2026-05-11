@@ -151,32 +151,19 @@ void GameManager::releaseHold(Direction dir) {
 void GameManager::update(float dt) {
     handleHeldInput();
 
-    for (auto& note : arrows) {
-        auto hold = dynamic_cast<HoldArrow*>(note.get());
+    updateNotes(arrows, dt);
+    updateNotes(holdarrows, dt);
 
-        if (hold) {
-            hold->update(dt);
-        }else
-            note->update(dt);
-    }
+    eraseNotes(arrows, [](const unique_ptr<Arrow>& note) {
+        return note->isOffScreen() || note->getIsPressed();
+    });
 
-    arrows.erase(
-        remove_if(arrows.begin(), arrows.end(),
-            [](const unique_ptr<Arrow>& notes) {
-                auto hold = dynamic_cast<HoldArrow*>(notes.get());
-
-                if (hold)
-                    return hold->isFinished() || hold->isMiss();
-                else
-                    return notes->isOffScreen() || notes->getIsPressed();
-            }), arrows.end()); // stergem notele care au iesit de pe ecran
+    eraseNotes(holdarrows, [](const unique_ptr<HoldArrow>& note) {
+    return note->isMiss() || note->isFinished();
+});
 }
 
 void GameManager::draw(sf::RenderWindow& window) {
-
-    for (auto& note : targetZones)
-        note.draw(window);
-
     for (auto& note : arrows)
         note->draw(window);
 }
@@ -203,6 +190,7 @@ void GameManager::loadSong(unique_ptr<Song> song) {
     nextOpponentNote = 0;
 
     arrows.clear();
+    holdarrows.clear();
 
     score = 0;
     combo = 0;
@@ -274,3 +262,20 @@ void GameManager::preloadTextures() {
 map<string, sf::Texture> GameManager::getTexture() const {
     return textures;
 }
+
+void GameManager::loadTargetZones() {
+    targetZones[0] = Arrow({700.f, 0.f}, 0.f, Direction::LEFT, false, false, textures["arrows"]);
+    targetZones[1] = Arrow({840.f, 0.f}, 0.f, Direction::DOWN, false, false, textures["arrows"]);
+    targetZones[2] = Arrow({980.f, 0.f}, 0.f, Direction::UP, false, false, textures["arrows"]);
+    targetZones[3] = Arrow({1120.f, 0.f}, 0.f, Direction::RIGHT, false, false, textures["arrows"]);
+    targetZones[4] = Arrow({100.f, 0.f}, 0.f, Direction::LEFT, false, false, textures["arrows"]);
+    targetZones[5] = Arrow({240.f, 0.f}, 0.f, Direction::DOWN, false, false, textures["arrows"]);
+    targetZones[6] = Arrow({380.f, 0.f}, 0.f, Direction::UP, false, false, textures["arrows"]);
+    targetZones[7] = Arrow({520.f, 0.f}, 0.f, Direction::RIGHT, false, false, textures["arrows"]);
+}
+
+void GameManager::drawTargetZones(sf::RenderWindow &window) {
+    for (auto& note : targetZones)
+        note.draw(window);
+}
+

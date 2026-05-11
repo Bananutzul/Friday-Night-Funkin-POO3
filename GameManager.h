@@ -16,18 +16,10 @@ using namespace std;
 
 class GameManager{
 private:
-    GameManager() {
-        targetZones[0] = Arrow({700.f, 0.f}, 0.f, Direction::LEFT, false, false, textures["arrows"]);
-        targetZones[1] = Arrow({840.f, 0.f}, 0.f, Direction::DOWN, false, false, textures["arrows"]);
-        targetZones[2] = Arrow({980.f, 0.f}, 0.f, Direction::UP, false, false, textures["arrows"]);
-        targetZones[3] = Arrow({1120.f, 0.f}, 0.f, Direction::RIGHT, false, false, textures["arrows"]);
-        targetZones[4] = Arrow({100.f, 0.f}, 0.f, Direction::LEFT, false, false, textures["arrows"]);
-        targetZones[5] = Arrow({240.f, 0.f}, 0.f, Direction::DOWN, false, false, textures["arrows"]);
-        targetZones[6] = Arrow({380.f, 0.f}, 0.f, Direction::UP, false, false, textures["arrows"]);
-        targetZones[7] = Arrow({520.f, 0.f}, 0.f, Direction::RIGHT, false, false, textures["arrows"]);
-    }
+    GameManager() {}
     static GameManager* instance;
     vector<unique_ptr<Arrow>> arrows;
+    vector<unique_ptr<HoldArrow>> holdarrows;
     Arrow targetZones[8];
     int score = 0;
     int combo = 0;
@@ -62,4 +54,24 @@ public:
     map<string, sf::Texture> getTexture() const;
 
     void preloadTextures();
+    void loadTargetZones();
+    void drawTargetZones(sf::RenderWindow& window);
+
+    template<typename T>
+    void updateNotes(vector<unique_ptr<T>>& notes, float dt) {
+        for (auto& note : notes)
+            note->update(dt);
+    }
+
+    template<typename T>
+    void drawNotes(vector<unique_ptr<T>>& notes, sf::RenderWindow& window) {
+        for (auto& note : notes)
+            note->draw(window);
+    }
+
+    template<typename T, typename Lambda>
+    void eraseNotes(vector<unique_ptr<T>>& notes, Lambda lambda) {
+        notes.erase(remove_if(notes.begin(), notes.end(),
+            lambda), notes.end());
+    }
 };

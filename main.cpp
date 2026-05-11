@@ -10,6 +10,7 @@ int main() {
     GameManager* gm = GameManager::getInstance();
 
     gm->preloadTextures();
+    gm->loadTargetZones();
 
     HoldArrow arrow(
         {1100.f, 600.f},
@@ -103,6 +104,7 @@ int main() {
         gm->update(dt);
 
         window.clear(sf::Color::Black);
+        gm->drawTargetZones(window);
         gm->draw(window);
 
         scoreText.setString("Score: " + to_string(gm->getScore()));

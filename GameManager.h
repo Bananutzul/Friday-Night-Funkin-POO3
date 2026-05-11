@@ -24,7 +24,6 @@ private:
     vector<unique_ptr<HoldArrow>> opponent_holdarrows;
     Arrow targetZones[8];
     int score = 0;
-    int combo = 0;
     float travelTime = 550 / 200.f * 1000.f;
 
     vector<Note> playerNotes;

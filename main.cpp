@@ -81,13 +81,10 @@ int main() {
     sf::Font font;
     font.openFromFile("font.ttf");
 
-    sf::Text scoreText(font), comboText(font);
+    sf::Text scoreText(font);
     scoreText.setCharacterSize(24);
     scoreText.setFillColor(sf::Color::White);
     scoreText.setPosition({10.f, 10.f});
-    comboText.setCharacterSize(24);
-    comboText.setFillColor(sf::Color::White);
-    comboText.setPosition({10.f, 40.f});
 
 
     while (window.isOpen()) {
@@ -109,10 +106,8 @@ int main() {
         gm->draw(window);
 
         scoreText.setString("Score: " + to_string(gm->getScore()));
-        comboText.setString("Combo: " + to_string(gm->getCombo()));
 
         window.draw(scoreText);
-        window.draw(comboText);
         window.display();
     }
 

@@ -34,9 +34,6 @@ void GameManager::checkHit(Direction dir) {
         closest->setIsPressed(true);
         cout << "Note pressed" << endl;
         score += 100;
-        combo++;
-    }else {
-        combo = 0;
     }
 
 }
@@ -65,8 +62,7 @@ void GameManager::checkHold(Direction dir) {
     if (closest && minOffset <= 90.f) {
         closest->setIsHeld(true);
         score += 50;
-        combo++;
-    }else combo = 0;
+    }
 }
 
 void GameManager::handleHeldInput() {
@@ -132,7 +128,6 @@ void GameManager::handleInput(sf::Event event) {
 
         if (valid) {
             releaseHold(dir);
-            combo = 0;
         }
     }
 }
@@ -185,10 +180,6 @@ int GameManager::getScore() const {
     return score;
 }
 
-int GameManager::getCombo() const {
-    return combo;
-}
-
 void GameManager::loadSong(unique_ptr<Song> song) {
     curr_song = std::move(song);
 
@@ -204,7 +195,6 @@ void GameManager::loadSong(unique_ptr<Song> song) {
     opponent_holdarrows.clear();
 
     score = 0;
-    combo = 0;
 
     curr_song->play();
 }

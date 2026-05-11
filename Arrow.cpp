@@ -76,7 +76,9 @@ Arrow& Arrow::operator=(const Arrow& obj) {
 Arrow::~Arrow() {}
 
 bool Arrow::isOffScreen() {
-    return position.y < 0;
+    if (isPlayerNote)
+        return position.y < -50.f;
+    else return position.y <= 0.f;
 }
 
 void Arrow::update(float dt) {

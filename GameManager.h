@@ -18,8 +18,10 @@ class GameManager{
 private:
     GameManager() {}
     static GameManager* instance;
-    vector<unique_ptr<Arrow>> arrows;
-    vector<unique_ptr<HoldArrow>> holdarrows;
+    vector<unique_ptr<Arrow>> player_arrows;
+    vector<unique_ptr<HoldArrow>> player_holdarrows;
+    vector<unique_ptr<Arrow>> opponent_arrows;
+    vector<unique_ptr<HoldArrow>> opponent_holdarrows;
     Arrow targetZones[8];
     int score = 0;
     int combo = 0;
@@ -74,13 +76,6 @@ public:
             lambda), notes.end());
     }
 
-    template<typename T>
-    void addNote(unique_ptr<T> note) {
-        arrows.push_back(std::move(note));
-    }
-
-    template<>
-    void addNote<HoldArrow>(unique_ptr<HoldArrow> note) {
-        holdarrows.push_back(std::move(note));
-    }
+    void addNote(unique_ptr<Arrow> note);
+    void addNote(unique_ptr<HoldArrow> note);
 };

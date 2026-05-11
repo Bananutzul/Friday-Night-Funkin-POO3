@@ -100,6 +100,7 @@ int main() {
             gm->handleInput(*event);
         }
 
+        gm->handleHeldInput();
         gm->spawnNotes();
         gm->update(dt);
 

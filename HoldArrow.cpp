@@ -54,7 +54,7 @@ HoldArrow::HoldArrow() : Arrow(){
 }
 
 HoldArrow::HoldArrow(sf::Vector2f position, float speed,
-    Direction direction, bool isPressed, bool isPlayerNote, float duration, bool isHeld) : Arrow(position, speed, direction, isPressed, isPlayerNote){
+    Direction direction, bool isPressed, const sf::Texture& texture, bool isPlayerNote, float duration, bool isHeld) : Arrow(position, speed, direction, isPressed, isPlayerNote, texture){
 
     line_position = position;
     this->duration = duration;

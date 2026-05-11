@@ -7,11 +7,16 @@ int main() {
     sf::RenderWindow window(sf::VideoMode({1500, 600}), "FNF");
     window.setFramerateLimit(60);
 
+    GameManager* gm = GameManager::getInstance();
+
+    gm->preloadTextures();
+
     HoldArrow arrow(
         {1100.f, 600.f},
         200.f,
         Direction::RIGHT,
         false,
+        gm->getTexture()["arrows"],
         true,
         2,
         false
@@ -22,6 +27,7 @@ int main() {
     200.f,
     Direction::UP,
     false,
+    gm->getTexture()["arrows"],
     true,
     4,
     false
@@ -31,6 +37,7 @@ int main() {
     200.f,
     Direction::LEFT,
     false,
+    gm->getTexture()["arrows"],
     true,
     4,
     false
@@ -40,12 +47,12 @@ int main() {
     200.f,
     Direction::DOWN,
     false,
+    gm->getTexture()["arrows"],
     true,
     4,
     false
 );
 
-    GameManager* gm = GameManager::getInstance();
 
     gm->addNote(make_unique<HoldArrow>(arrow));
     gm->addNote(make_unique<HoldArrow>(arrow2));

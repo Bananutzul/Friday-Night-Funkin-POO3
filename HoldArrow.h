@@ -22,7 +22,7 @@ private:
     vector<sf::Sprite> lineTiles;
 public:
     HoldArrow();
-    HoldArrow(sf::Vector2f, float, Direction, bool, bool, float, bool);
+    HoldArrow(sf::Vector2f, float, Direction, bool, const sf::Texture&, bool, float, bool);
     HoldArrow(const HoldArrow& obj);
     HoldArrow& operator=(const HoldArrow& obj);
     virtual ~HoldArrow();

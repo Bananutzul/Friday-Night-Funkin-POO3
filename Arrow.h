@@ -17,10 +17,10 @@ protected:
     bool isPressed;
     bool isPlayerNote;
 
-    void initShape();
+    void initShape(const sf::Texture& texture);
 public:
     Arrow();
-    Arrow(sf::Vector2f, float, Direction, bool, bool);
+    Arrow(sf::Vector2f, float, Direction, bool, bool, const sf::Texture&);
     Arrow(const Arrow& obj);
     Arrow& operator=(const Arrow& obj);
     virtual ~Arrow();

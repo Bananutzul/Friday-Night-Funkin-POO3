@@ -9,23 +9,25 @@ GameManager* GameManager::instance = nullptr;
 
 void GameManager::checkHit(Direction dir) {
     for (auto& note : arrows) {
-        if (note->getDirection() == dir) {
-            float noteY, targetY, offset;
+        if (note->getIsPlayerNote()) {
+            if (note->getDirection() == dir) {
+                float noteY, targetY, offset;
 
-            noteY = note->getPosition().y;
-            targetY = targetZones[(int)dir].getPosition().y;
-            offset = abs(noteY - targetY);
+                noteY = note->getPosition().y;
+                targetY = targetZones[(int)dir].getPosition().y;
+                offset = abs(noteY - targetY);
 
-            if (offset <= 100.f) {
-                note->setIsPressed(true);
+                if (offset <= 100.f) {
+                    note->setIsPressed(true);
 
-                if (offset <= 50.f) {
-                    score += 100;
-                    combo++;
-                }else
-                    combo = 0;
+                    if (offset <= 50.f) {
+                        score += 100;
+                        combo++;
+                    }else
+                        combo = 0;
+                }
+                break;
             }
-            break;
         }
     }
 
@@ -66,7 +68,6 @@ void GameManager::handleHeldInput() {
 }
 
 void GameManager::handleInput(sf::Event event) {
-
     if (const auto& keyEvent = event.getIf<sf::Event::KeyPressed>()) {
         Direction dir;
         bool valid = true;
@@ -213,30 +214,30 @@ void GameManager::spawnNotes() {
     float current_timeMs = curr_song->getTimeMs();
     travelTime = 550.f / 200.f * 1000.f;
 
-    while (nextPlayerNote < playerNotes.size()) {
-        auto& note = playerNotes[nextPlayerNote];
-
-        if (current_timeMs >= note.time - travelTime) {
-            cout << "Spawn Note Now" << travelTime << endl;
-
-            float x;
-
-            switch (note.direction) {
-                case Direction::LEFT: x = 650.f;break;
-                case Direction::DOWN: x = 800.f;break;
-                case Direction::UP: x = 950.f;break;
-                case Direction::RIGHT: x = 1100.f;break;
-            }
-
-            if (note.duration > 0) {
-                arrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, true, note.duration / 1000.f, false));
-            }else {
-                arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, true));
-            }
-
-            nextPlayerNote++;
-        }else break;
-    }
+    // while (nextPlayerNote < playerNotes.size()) {
+    //     auto& note = playerNotes[nextPlayerNote];
+    //
+    //     if (current_timeMs >= note.time - travelTime) {
+    //         cout << "Spawn Note Now" << travelTime << endl;
+    //
+    //         float x;
+    //
+    //         switch (note.direction) {
+    //             case Direction::LEFT: x = 700.f;break;
+    //             case Direction::DOWN: x = 840.f;break;
+    //             case Direction::UP: x = 980.f;break;
+    //             case Direction::RIGHT: x = 1120.f;break;
+    //         }
+    //
+    //         if (note.duration > 0) {
+    //             arrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, true, note.duration / 1000.f, false));
+    //         }else {
+    //             arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, true));
+    //         }
+    //
+    //         nextPlayerNote++;
+    //     }else break;
+    // }
 
     while (nextOpponentNote < opponentNotes.size()) {
         auto& note = opponentNotes[nextOpponentNote];
@@ -248,18 +249,28 @@ void GameManager::spawnNotes() {
 
             switch (note.direction) {
                 case Direction::LEFT: x = 100.f;break;
-                case Direction::DOWN: x = 250.f;break;
-                case Direction::UP: x = 400.f;break;
-                case Direction::RIGHT: x = 650.f;break;
+                case Direction::DOWN: x = 240.f;break;
+                case Direction::UP: x = 380.f;break;
+                case Direction::RIGHT: x = 520.f;break;
             }
 
             if (note.duration > 0) {
-                arrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, false, note.duration / 1000.f, false));
+                arrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, textures["arrows"], false, note.duration / 1000.f, false));
             }else {
-                arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, false));
+                arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, false, textures["arrows"]));
             }
 
             nextOpponentNote++;
         }else break;
     }
+}
+
+void GameManager::preloadTextures() {
+    sf::Texture texture;
+    texture.loadFromFile("arrows.png");
+    textures["arrows"] = std::move(texture);
+}
+
+map<string, sf::Texture> GameManager::getTexture() const {
+    return textures;
 }

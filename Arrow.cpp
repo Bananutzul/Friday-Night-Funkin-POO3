@@ -3,8 +3,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
-void Arrow::initShape() {
-        texture.loadFromFile("arrows.png");
+void Arrow::initShape(const sf::Texture& texture) {
         sprite = sf::Sprite(texture);
 
         switch(direction) {
@@ -36,16 +35,17 @@ Arrow::Arrow() {
     isPressed = false;
     isPlayerNote = false;
 
-    initShape();
+    initShape(texture);
 }
 
-Arrow::Arrow(sf::Vector2f position, float speed, Direction direction, bool isPressed, bool isPlayer) {
+Arrow::Arrow(sf::Vector2f position, float speed, Direction direction, bool isPressed, bool isPlayer, const sf::Texture& texture) {
     this->position = position;
     this->speed = speed;
     this->direction = direction;
     this->isPressed = isPressed;
     isPlayerNote = isPlayer;
-    this->initShape();
+    this->texture = texture;
+    this->initShape(texture);
 }
 
 Arrow::Arrow(const Arrow& obj) {
@@ -54,7 +54,8 @@ Arrow::Arrow(const Arrow& obj) {
     direction = obj.direction;
     isPressed = obj.isPressed;
     isPlayerNote = obj.isPlayerNote;
-    initShape();
+    texture = obj.texture;
+    initShape(texture);
 }
 
 Arrow& Arrow::operator=(const Arrow& obj) {
@@ -66,7 +67,8 @@ Arrow& Arrow::operator=(const Arrow& obj) {
     direction = obj.direction;
     isPressed = obj.isPressed;
     isPlayerNote = obj.isPlayerNote;
-    initShape();
+    texture = obj.texture;
+    initShape(texture);
 
     return *this;
 }

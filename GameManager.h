@@ -17,14 +17,18 @@ using namespace std;
 class GameManager{
 private:
     GameManager() {
-        targetZones[0] = Arrow({650.f, 0.f}, 0.f, Direction::LEFT, false, false);
-        targetZones[1] = Arrow({800.f, 0.f}, 0.f, Direction::DOWN, false, false);
-        targetZones[2] = Arrow({950.f, 0.f}, 0.f, Direction::UP, false, false);
-        targetZones[3] = Arrow({1100.f, 0.f}, 0.f, Direction::RIGHT, false, false);
+        targetZones[0] = Arrow({700.f, 0.f}, 0.f, Direction::LEFT, false, false, textures["arrows"]);
+        targetZones[1] = Arrow({840.f, 0.f}, 0.f, Direction::DOWN, false, false, textures["arrows"]);
+        targetZones[2] = Arrow({980.f, 0.f}, 0.f, Direction::UP, false, false, textures["arrows"]);
+        targetZones[3] = Arrow({1120.f, 0.f}, 0.f, Direction::RIGHT, false, false, textures["arrows"]);
+        targetZones[4] = Arrow({100.f, 0.f}, 0.f, Direction::LEFT, false, false, textures["arrows"]);
+        targetZones[5] = Arrow({240.f, 0.f}, 0.f, Direction::DOWN, false, false, textures["arrows"]);
+        targetZones[6] = Arrow({380.f, 0.f}, 0.f, Direction::UP, false, false, textures["arrows"]);
+        targetZones[7] = Arrow({520.f, 0.f}, 0.f, Direction::RIGHT, false, false, textures["arrows"]);
     }
     static GameManager* instance;
     vector<unique_ptr<Arrow>> arrows;
-    Arrow targetZones[4];
+    Arrow targetZones[8];
     int score = 0;
     int combo = 0;
     float travelTime = 550 / 200.f * 1000.f;
@@ -33,6 +37,8 @@ private:
     vector<Note> opponentNotes;
     unique_ptr<Song> curr_song;
     int nextPlayerNote = 0, nextOpponentNote = 0; // indexi prin care tinem minte urmatoarea nota pe care trebuie sa o afisam
+
+    map<string, sf::Texture> textures; // preload la texturi
 public:
     static GameManager* getInstance() {
         if (instance == nullptr)
@@ -53,4 +59,7 @@ public:
 
     int getScore() const;
     int getCombo() const;
+    map<string, sf::Texture> getTexture() const;
+
+    void preloadTextures();
 };

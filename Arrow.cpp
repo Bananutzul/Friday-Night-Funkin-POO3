@@ -109,4 +109,9 @@ bool Arrow::getIsPlayerNote() const {
     return isPlayerNote;
 }
 
+float Arrow::getX() const {
+    return position.x;
+}
+
+
 

@@ -10,7 +10,7 @@ GameManager* GameManager::instance = nullptr;
 void GameManager::checkHit(Direction dir) {
     for (auto& note : arrows) {
         if (note->getIsPlayerNote()) {
-            if (note->getDirection() == dir) {
+            if (note->getDirection() == dir && note->getX() ) {
                 float noteY, targetY, offset;
 
                 noteY = note->getPosition().y;
@@ -36,7 +36,7 @@ void GameManager::checkHit(Direction dir) {
 void GameManager::checkHold(Direction dir) {
     for (auto& note : holdarrows) {
 
-        if (note->getDirection() == dir) {
+        if (note->getDirection() == dir && note->getIsPlayerNote()) {
             float noteY, targetY, offset;
 
             noteY = note->getPosition().y;
@@ -138,8 +138,7 @@ void GameManager::handleInput(sf::Event event) {
 
 void GameManager::releaseHold(Direction dir) {
     for (auto& hold : holdarrows) {
-
-        if (hold->getDirection() == dir)
+        if (hold->getDirection() == dir && hold->getIsPlayerNote())
             hold->setIsHeld(false);
     }
 }

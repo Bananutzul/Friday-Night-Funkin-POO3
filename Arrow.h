@@ -34,4 +34,5 @@ public:
     void setIsPressed(bool val);
     bool getIsPressed() const;
     bool getIsPlayerNote() const;
+    float getX() const;
 };

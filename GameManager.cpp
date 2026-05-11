@@ -237,29 +237,29 @@ void GameManager::spawnNotes() {
         }else break;
     }
 
-    // while (nextOpponentNote < opponentNotes.size()) {
-    //     auto& note = opponentNotes[nextOpponentNote];
-    //
-    //     if (current_timeMs >= note.time - travelTime) {
-    //
-    //         float x;
-    //
-    //         switch (note.direction) {
-    //             case Direction::LEFT: x = 100.f;break;
-    //             case Direction::DOWN: x = 240.f;break;
-    //             case Direction::UP: x = 380.f;break;
-    //             case Direction::RIGHT: x = 520.f;break;
-    //         }
-    //
-    //         if (note.duration > 0) {
-    //             holdarrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, textures["arrows"], false, note.duration / 1000.f, false));
-    //         }else {
-    //             arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, false, textures["arrows"]));
-    //         }
-    //
-    //         nextOpponentNote++;
-    //     }else break;
-    // }
+    while (nextOpponentNote < opponentNotes.size()) {
+        auto& note = opponentNotes[nextOpponentNote];
+
+        if (current_timeMs >= note.time - travelTime) {
+
+            float x;
+
+            switch (note.direction) {
+                case Direction::LEFT: x = 100.f;break;
+                case Direction::DOWN: x = 240.f;break;
+                case Direction::UP: x = 380.f;break;
+                case Direction::RIGHT: x = 520.f;break;
+            }
+
+            if (note.duration > 0) {
+               opponent_holdarrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, textures["arrows"], false, note.duration / 1000.f, false));
+            }else {
+                opponent_arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, false, textures["arrows"]));
+            }
+
+            nextOpponentNote++;
+        }else break;
+    }
 }
 
 void GameManager::preloadTextures() {

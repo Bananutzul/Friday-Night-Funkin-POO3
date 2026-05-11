@@ -43,7 +43,6 @@ public:
     void checkHit(Direction dir);
     void checkHold(Direction dir);
     void releaseHold(Direction dir);
-    void addNote(unique_ptr<Arrow> note);
     void update(float dt);
     void draw(sf::RenderWindow& window);
     void loadSong(unique_ptr<Song> song);
@@ -73,5 +72,15 @@ public:
     void eraseNotes(vector<unique_ptr<T>>& notes, Lambda lambda) {
         notes.erase(remove_if(notes.begin(), notes.end(),
             lambda), notes.end());
+    }
+
+    template<typename T>
+    void addNote(unique_ptr<T> note) {
+        arrows.push_back(std::move(note));
+    }
+
+    template<>
+    void addNote<HoldArrow>(unique_ptr<HoldArrow> note) {
+        holdarrows.push_back(std::move(note));
     }
 };

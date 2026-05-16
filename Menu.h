@@ -12,7 +12,7 @@ using namespace std;
 
 class Menu {
 private:
-    Chartc chart;
+    Chart chart;
     GameManager gm;
 public:
 

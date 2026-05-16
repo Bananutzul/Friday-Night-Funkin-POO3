@@ -232,6 +232,10 @@ void GameManager::update(float dt) {
 }
 
 void GameManager::draw(sf::RenderWindow& window) {
+
+    if (background)
+        window.draw(*background);
+
     if (player) {
         player->draw(window);
     }
@@ -347,6 +351,12 @@ void GameManager::preloadTextures() {
     } else {
         cout << "Eroare la incarcarea sprite sheet-ului pt player!\n";
     }
+
+    if (backgroundTexture.loadFromFile("stageback.png")) {
+        background = make_unique<sf::Sprite>(backgroundTexture);
+        background->setScale({1300.f / backgroundTexture.getSize().x, 700.f / backgroundTexture.getSize().y});
+    }
+    else cout << "Eroare la incarcarea sprite-ului pt background!\n";
 }
 
 map<string, sf::Texture> GameManager::getTexture() const {

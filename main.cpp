@@ -94,8 +94,8 @@ int main() {
         gm->update(dt);
 
         window.clear(sf::Color::Black);
-        gm->drawTargetZones(window);
         gm->draw(window);
+        gm->drawTargetZones(window);
 
         scoreText.setString("Score: " + to_string(gm->getScore()));
         string aux = gm->getPerfect();

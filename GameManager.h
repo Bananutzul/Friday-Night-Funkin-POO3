@@ -49,6 +49,9 @@ private:
 
     sf::Texture playerTexture;
     unique_ptr<Player> player;
+
+    sf::Texture backgroundTexture;
+    unique_ptr<sf::Sprite> background;
 public:
     static GameManager* getInstance() {
         if (instance == nullptr)

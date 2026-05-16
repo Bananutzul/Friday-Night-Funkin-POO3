@@ -64,18 +64,6 @@ int main() {
     auto song = make_unique<Song>("Bopeebo", "Inst.ogg", "Voices-bf.ogg", "Voices-dad.ogg", chart);
     gm->loadSong(std::move(song));
 
-    auto playerNotes = chart.getPlayerNotes();
-    auto opponentNotes = chart.getOpponentNotes();
-    cout << "Opponent notes: " << opponentNotes.size() << endl;
-    cout << "Player notes: " << playerNotes.size() << "\n";
-    for (int i = 0; i < 10 && i < playerNotes.size(); i++) {
-        cout << "t=" << playerNotes[i].time
-             << " dir=" << (int)playerNotes[i].direction
-             << " dur=" << playerNotes[i].duration << "\n";
-    }
-
-
-
     sf::Clock clock;
 
     sf::Font font;

@@ -16,7 +16,12 @@ using namespace std;
 
 class GameManager{
 private:
-    GameManager() {}
+    GameManager() {
+        if (buf3.loadFromFile("intro3.ogg")) sound3 = new sf::Sound(buf3);
+        if (buf2.loadFromFile("intro2.ogg")) sound2 = new sf::Sound(buf2);
+        if (buf1.loadFromFile("intro1.ogg")) sound1 = new sf::Sound(buf1);
+        if (bufGo.loadFromFile("introGo.ogg")) soundGo = new sf::Sound(bufGo);
+    }
     static GameManager* instance;
     vector<unique_ptr<Arrow>> player_arrows;
     vector<unique_ptr<HoldArrow>> player_holdarrows;
@@ -25,6 +30,13 @@ private:
     Arrow targetZones[8];
     int score = 0;
     float travelTime = 550 / 200.f * 1000.f;
+
+    float gameTimeMs = 0.f;
+    float introDurationMs = 0.f;
+    bool songStarted = false;
+    sf::SoundBuffer buf3, buf2, buf1, bufGo;
+    sf::Sound* sound3 = nullptr, *sound2 = nullptr, *sound1 = nullptr, *soundGo = nullptr;
+    bool played1 = false, played2 = false, played3 = false, playedGo = false;
 
     vector<Note> playerNotes;
     vector<Note> opponentNotes;

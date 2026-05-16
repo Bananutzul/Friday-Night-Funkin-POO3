@@ -72,7 +72,11 @@ HoldArrow::HoldArrow(const HoldArrow &obj) : Arrow(obj){
 HoldArrow::~HoldArrow(){};
 
 void HoldArrow::update(float dt) {
-    if (!isHeld) {
+    if (getIsPlayerNote() == false && position.y <= 3.5f) {
+        position.y -= 0;
+        current_time_held += dt;
+    }
+    else if (!isHeld) {
         position.y -= speed * dt;
     }else {
         current_time_held += dt;

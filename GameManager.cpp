@@ -44,7 +44,7 @@ void GameManager::checkHold(Direction dir) {
 
     for (auto& note : player_holdarrows) {
 
-        if (note->getDirection() == dir && note->getIsPlayerNote() && note->getPosition().y > 0) {
+        if (note->getDirection() == dir && note->getIsPlayerNote() && note->getPosition().y >= -15.f) {
             float noteY, targetY, offset;
 
             noteY = note->getPosition().y;
@@ -141,6 +141,29 @@ void GameManager::releaseHold(Direction dir) {
 
 void GameManager::update(float dt) {
 
+    if (!songStarted) {
+        gameTimeMs += 1000.f * dt;
+
+        if (gameTimeMs >= 0) {
+            gameTimeMs = 0;
+            curr_song->play();
+            songStarted = true;
+        }
+    }else {
+        gameTimeMs = curr_song->getTimeMs();
+    }
+
+    float beat = introDurationMs / 4.f;
+
+    if (!played1 && gameTimeMs >= -introDurationMs)
+        sound1->play(), played1 = true;
+    if (!played2 && gameTimeMs >= -introDurationMs + beat)
+        sound2->play(), played2 = true;
+    if (!played3 && gameTimeMs >= -introDurationMs + beat * 2)
+        sound3->play(), played3 = true;
+    if (!playedGo && gameTimeMs >= -introDurationMs + beat * 3)
+        soundGo->play(), playedGo = true;
+
     updateNotes(player_arrows, dt);
     updateNotes(player_holdarrows, dt);
     updateNotes(opponent_arrows, dt);
@@ -183,6 +206,15 @@ int GameManager::getScore() const {
 void GameManager::loadSong(unique_ptr<Song> song) {
     curr_song = std::move(song);
 
+    buf1.loadFromFile("intro1.ogg");
+    sound1->setBuffer(buf3);
+    buf2.loadFromFile("intro2.ogg");
+    sound2->setBuffer(buf2);
+    buf3.loadFromFile("intro3.ogg");
+    sound3->setBuffer(buf1);
+    bufGo.loadFromFile("introGo.ogg");
+    soundGo->setBuffer(bufGo);
+
     playerNotes = curr_song->getChart().getPlayerNotes();
     opponentNotes = curr_song->getChart().getOpponentNotes();
 
@@ -196,11 +228,17 @@ void GameManager::loadSong(unique_ptr<Song> song) {
 
     score = 0;
 
-    curr_song->play();
+    float beatDuration = 600.f;
+    introDurationMs = beatDuration * 4;
+
+    gameTimeMs = -introDurationMs;
+
+    songStarted = false;
+    played1 = false, played2 = false, played3 = false, playedGo = false;
 }
 
 void GameManager::spawnNotes() {
-    float current_timeMs = curr_song->getTimeMs();
+    float current_timeMs = gameTimeMs;
     travelTime = 550.f / 200.f * 1000.f;
 
     while (nextPlayerNote < playerNotes.size()) {

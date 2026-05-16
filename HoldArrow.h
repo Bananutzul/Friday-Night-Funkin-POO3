@@ -14,6 +14,7 @@ private:
     sf::Vector2f line_position = position;
     float duration;
     bool isHeld;
+    bool hasBeenHeld = false;
     bool miss = false;
     float current_time_held = 0.f;
     float tileHeight = 20.f;
@@ -37,4 +38,6 @@ public:
     void setMiss(bool val);
     bool getIsHeld() const;
     void updateHeldTimer(float dt);
+    void setHasBeenHeld(bool val);
+    bool getHasBeenHeld() const;
 };

@@ -59,3 +59,6 @@ string Song::getName() const {
     return name;
 }
 
+float Song::getSpeedMultiplier() const {
+    return getChart().getSpeedMultiplier();
+}

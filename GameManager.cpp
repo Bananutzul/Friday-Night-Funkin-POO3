@@ -32,20 +32,20 @@ void GameManager::checkHit(Direction dir) {
 
     if (closest && minOffset <= 90.f) {
         if (abs(minOffset) <= 15.f)
-            perfect = "Perfect!";
+            perfect = "Perfect!", score += 250;
         else if (abs(minOffset) <= 40.f)
-            perfect = "Great!";
+            perfect = "Great!", score += 150;
         else if (abs(minOffset) <= 90.f)
-            perfect = "Good!";
+            perfect = "Good!", score += 100;
 
         if (player) player->setState(PlayerState::HIT);
 
         closest->setIsPressed(true);
-        score += 100;
     }
     else if (closest && minOffset <= 250.f) {
         perfect = "Miss!";
         if (player) player->setState(PlayerState::MISS);
+        misses++;
     }
 }
 
@@ -72,20 +72,22 @@ void GameManager::checkHold(Direction dir) {
 
     if (closest && minOffset <= 90.f) {
         if (abs(minOffset) <= 15.f)
-            perfect = "Perfect!";
+            perfect = "Perfect!", score += 250;
         else if (abs(minOffset) <= 40.f)
-            perfect = "Great!";
+            perfect = "Great!", score += 150;
         else if (abs(minOffset) <= 90.f)
-            perfect = "Good!";
+            perfect = "Good!", score += 100;
 
         if (player) player->setState(PlayerState::HIT);
 
         closest->setIsHeld(true);
         score += 50;
 
-    }else if (closest && minOffset <= 250.f) {
+    }else if (closest && minOffset <= 250.f && closest->getHasBeenHeld() == false) {
+        closest->setHasBeenHeld(true);
         perfect = "Miss!";
         if (player) player->setState(PlayerState::MISS);
+        misses++;
     }
 }
 
@@ -166,6 +168,8 @@ void GameManager::releaseHold(Direction dir) {
 
 void GameManager::update(float dt) {
 
+    cout << curr_song->getSpeedMultiplier();
+
     if (!songStarted) {
         gameTimeMs += 1000.f * dt;
 
@@ -202,6 +206,7 @@ void GameManager::update(float dt) {
         if (note->isOffScreen()) {
             perfect = "Miss!";
             player->setState(PlayerState::MISS);
+            misses++;
         }
     }
 
@@ -209,6 +214,7 @@ void GameManager::update(float dt) {
         if (note->isOffScreen()) {
             perfect = "Miss!";
             player->setState(PlayerState::MISS);
+            misses++;
         }
     }
 
@@ -290,7 +296,7 @@ void GameManager::loadSong(unique_ptr<Song> song) {
 
 void GameManager::spawnNotes() {
     float current_timeMs = gameTimeMs;
-    travelTime = 550.f / 200.f * 1000.f;
+    travelTime = 550.f / (200.f * curr_song->getSpeedMultiplier()) * 1000.f;
 
     while (nextPlayerNote < playerNotes.size()) {
         auto& note = playerNotes[nextPlayerNote];
@@ -307,9 +313,9 @@ void GameManager::spawnNotes() {
             }
 
             if (note.duration > 0) {
-                player_holdarrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, textures["arrows"], true, note.duration / 1000.f, false));
+                player_holdarrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f * curr_song->getSpeedMultiplier(), note.direction, false, textures["arrows"], true, note.duration / 1000.f, false));
             }else {
-                player_arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, true, textures["arrows"]));
+                player_arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f * curr_song->getSpeedMultiplier(), note.direction, false, true, textures["arrows"]));
             }
 
             nextPlayerNote++;
@@ -331,9 +337,9 @@ void GameManager::spawnNotes() {
             }
 
             if (note.duration > 0) {
-               opponent_holdarrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, textures["arrows"], false, note.duration / 1000.f, false));
+               opponent_holdarrows.push_back(make_unique<HoldArrow>(sf::Vector2f({x, 600.f}), 200.f * curr_song->getSpeedMultiplier(), note.direction, false, textures["arrows"], false, note.duration / 1000.f, false));
             }else {
-                opponent_arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f, note.direction, false, false, textures["arrows"]));
+                opponent_arrows.push_back(make_unique<Arrow>(sf::Vector2f({x, 600.f}), 200.f * curr_song->getSpeedMultiplier(), note.direction, false, false, textures["arrows"]));
             }
 
             nextOpponentNote++;
@@ -395,4 +401,8 @@ void GameManager::addNote(unique_ptr<HoldArrow> note) {
 
 string GameManager::getPerfect() const {
     return perfect;
+}
+
+int GameManager::getMisses() const {
+    return misses;
 }

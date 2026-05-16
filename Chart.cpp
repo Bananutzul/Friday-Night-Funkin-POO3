@@ -21,6 +21,8 @@ Chart::Chart(const string& filename, const string difficulty) {
 
         json data = json::parse(fin);
 
+        speedMultiplier = (float)data["scrollSpeed"][difficulty];
+
         for (auto& note : data["notes"][difficulty]) {
             int d = note["d"];
 
@@ -84,4 +86,9 @@ vector<Note> Chart::getPlayerNotes() const {
 vector<Note> Chart::getOpponentNotes() const {
     return opponent_notes;
 }
+
+float Chart::getSpeedMultiplier() const {
+    return speedMultiplier;
+}
+
 

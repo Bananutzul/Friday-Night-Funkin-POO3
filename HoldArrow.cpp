@@ -124,4 +124,14 @@ bool HoldArrow::isMiss() const {
     return miss;
 }
 
+void HoldArrow::setHasBeenHeld(bool val) {
+    hasBeenHeld = val;
+}
+
+bool HoldArrow::getHasBeenHeld() const {
+    return hasBeenHeld;
+}
+
+
+
 

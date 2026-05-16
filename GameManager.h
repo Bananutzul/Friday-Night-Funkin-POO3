@@ -32,6 +32,7 @@ private:
     int score = 0;
     string perfect;
     float travelTime = 550 / 200.f * 1000.f;
+    int misses = 0;
 
     float gameTimeMs = 0.f;
     float introDurationMs = 0.f;
@@ -72,6 +73,7 @@ public:
     int getScore() const;
     string getPerfect() const;
     int getCombo() const;
+    int getMisses() const;
     map<string, sf::Texture> getTexture() const;
 
     void preloadTextures();

@@ -19,6 +19,7 @@ private:
     vector<Note> player_notes;
     vector<Note> opponent_notes;
     string difficulty;
+    float speedMultiplier = 1.6f;
 public:
     Chart();
     Chart(const string& filename, string difficulty);
@@ -27,6 +28,7 @@ public:
 
     vector<Note> getPlayerNotes() const;
     vector<Note> getOpponentNotes() const;
+    float getSpeedMultiplier() const;
 };
 
 

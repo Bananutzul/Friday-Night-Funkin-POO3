@@ -61,7 +61,7 @@ int main() {
     gm->addNote(make_unique<Arrow>(arrow4));
 
     Chart chart("bopeebo-chart.json", "hard");
-    auto song = make_unique<Song>("Bopeebo", "Inst.ogg", "Voices-bf.ogg", "Voices-dad.ogg", chart);
+    auto song = make_unique<Song>("Dad Battle", "Inst.ogg", "Voices-bf.ogg", "Voices-dad.ogg", chart);
     gm->loadSong(std::move(song));
 
     sf::Clock clock;
@@ -72,11 +72,16 @@ int main() {
     sf::Text scoreText(font);
     scoreText.setCharacterSize(24);
     scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition({10.f, 10.f});
+    scoreText.setPosition({10.f, 30.f});
 
     sf::Text perfect(font);
     perfect.setCharacterSize(24);
     perfect.setPosition({750.f, 40.f});
+
+    sf::Text misses(font);
+    misses.setCharacterSize(24);
+    misses.setPosition({10.f, 80.f});
+    misses.setFillColor(sf::Color::Red);
 
 
     while (window.isOpen()) {
@@ -98,6 +103,7 @@ int main() {
         gm->drawTargetZones(window);
 
         scoreText.setString("Score: " + to_string(gm->getScore()));
+        misses.setString("Misses: " + to_string(gm->getMisses()));
         string aux = gm->getPerfect();
 
         if (aux == "Perfect!")
@@ -115,6 +121,7 @@ int main() {
 
         window.draw(scoreText);
         window.draw(perfect);
+        window.draw(misses);
         window.display();
     }
 

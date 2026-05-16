@@ -21,7 +21,9 @@ add_executable(FNF main.cpp
         Chart.cpp
         Song.h
         Song.cpp
-        Menu.h)
+        Menu.h
+        Player.h
+        Player.cpp)
 
 target_include_directories(FNF PRIVATE
         "/opt/homebrew/Cellar/sfml/3.0.2/include"

@@ -31,11 +31,18 @@ void GameManager::checkHit(Direction dir) {
     }
 
     if (closest && minOffset <= 90.f) {
+        if (abs(minOffset) <= 15.f)
+            perfect = "Perfect!";
+        else if (abs(minOffset) <= 40.f)
+            perfect = "Great!";
+        else if (abs(minOffset) <= 90.f)
+            perfect = "Good!";
+
         closest->setIsPressed(true);
-        cout << "Note pressed" << endl;
         score += 100;
     }
-
+    else if (closest && minOffset <= 250.f)
+        perfect = "Miss!";
 }
 
 void GameManager::checkHold(Direction dir) {
@@ -60,9 +67,18 @@ void GameManager::checkHold(Direction dir) {
     }
 
     if (closest && minOffset <= 90.f) {
+        if (abs(minOffset) <= 15.f)
+            perfect = "Perfect!";
+        else if (abs(minOffset) <= 40.f)
+            perfect = "Great!";
+        else if (abs(minOffset) <= 90.f)
+            perfect = "Good!";
+
         closest->setIsHeld(true);
         score += 50;
-    }
+
+    }else if (closest && minOffset <= 250.f)
+        perfect = "Miss!";
 }
 
 void GameManager::handleHeldInput() {
@@ -128,6 +144,7 @@ void GameManager::handleInput(sf::Event event) {
 
         if (valid) {
             releaseHold(dir);
+            perfect = "";
         }
     }
 }
@@ -174,15 +191,15 @@ void GameManager::update(float dt) {
     });
 
     eraseNotes(player_holdarrows, [](const unique_ptr<HoldArrow>& note) {
-    return note->isMiss() || note->isFinished();
+        return note->isMiss() || note->isFinished();
     });
 
     eraseNotes(opponent_arrows, [](const unique_ptr<Arrow>& note) {
-    return note->isOffScreen();
+        return note->isOffScreen();
     });
 
     eraseNotes(opponent_holdarrows, [](const unique_ptr<HoldArrow>& note) {
-    return note->isOffScreen();
+        return note->isOffScreen();
     });
 
 
@@ -328,4 +345,8 @@ void GameManager::addNote(unique_ptr<HoldArrow> note) {
         player_holdarrows.push_back(std::move(note));
     else
         opponent_holdarrows.push_back(std::move(note));
+}
+
+string GameManager::getPerfect() const {
+    return perfect;
 }

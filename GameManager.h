@@ -29,6 +29,7 @@ private:
     vector<unique_ptr<HoldArrow>> opponent_holdarrows;
     Arrow targetZones[8];
     int score = 0;
+    string perfect;
     float travelTime = 550 / 200.f * 1000.f;
 
     float gameTimeMs = 0.f;
@@ -62,6 +63,7 @@ public:
     void spawnNotes();
 
     int getScore() const;
+    string getPerfect() const;
     int getCombo() const;
     map<string, sf::Texture> getTexture() const;
 

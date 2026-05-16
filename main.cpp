@@ -74,6 +74,10 @@ int main() {
     scoreText.setFillColor(sf::Color::White);
     scoreText.setPosition({10.f, 10.f});
 
+    sf::Text perfect(font);
+    perfect.setCharacterSize(24);
+    perfect.setPosition({750.f, 40.f});
+
 
     while (window.isOpen()) {
         float dt = clock.restart().asSeconds();
@@ -94,8 +98,23 @@ int main() {
         gm->draw(window);
 
         scoreText.setString("Score: " + to_string(gm->getScore()));
+        string aux = gm->getPerfect();
+
+        if (aux == "Perfect!")
+            perfect.setFillColor(sf::Color::Green);
+        else if (aux == "Great!")
+            perfect.setFillColor(sf::Color::Blue);
+        else if (aux == "Good!")
+            perfect.setFillColor(sf::Color::Yellow);
+        else if (aux == "Miss!")
+            perfect.setFillColor(sf::Color::Red);
+
+        perfect.setString(aux);
+
+        cout << gm->getPerfect() << endl;
 
         window.draw(scoreText);
+        window.draw(perfect);
         window.display();
     }
 

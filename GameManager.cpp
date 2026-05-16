@@ -198,12 +198,26 @@ void GameManager::update(float dt) {
     updateNotes(opponent_arrows, dt);
     updateNotes(opponent_holdarrows, dt);
 
+    for (auto& note : player_arrows) {
+        if (note->isOffScreen()) {
+            perfect = "Miss!";
+            player->setState(PlayerState::MISS);
+        }
+    }
+
+    for (auto& note : player_holdarrows) {
+        if (note->isOffScreen()) {
+            perfect = "Miss!";
+            player->setState(PlayerState::MISS);
+        }
+    }
+
     eraseNotes(player_arrows, [](const unique_ptr<Arrow>& note) {
         return note->isOffScreen() || note->getIsPressed();
     });
 
     eraseNotes(player_holdarrows, [](const unique_ptr<HoldArrow>& note) {
-        return note->isMiss() || note->isFinished();
+        return note->isMiss() || note->isFinished() || note->isOffScreen();
     });
 
     eraseNotes(opponent_arrows, [](const unique_ptr<Arrow>& note) {

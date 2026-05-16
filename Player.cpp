@@ -6,7 +6,7 @@ using namespace std;
 
 Player::Player(sf::Texture& texture) : sprite(texture){
 
-    sprite.setScale({0.25f, 0.25f});
+    sprite.setScale({0.45f, 0.45f});
 
     idleFrames = {
         sf::IntRect({10, 10}, {390, 390}),
@@ -15,17 +15,16 @@ Player::Player(sf::Texture& texture) : sprite(texture){
     };
 
     missFrames = {
-        sf::IntRect({10, 410}, {390, 390}),
-        sf::IntRect({410, 410}, {390, 390})
+        sf::IntRect({10, 410}, {390, 390})
     };
 
     hitFrames = {
-        sf::IntRect({1210, 10}, {390, 390}),
-        sf::IntRect({1610, 10}, {390, 390})
+        sf::IntRect({1210, 10}, {380, 380}),
+        sf::IntRect({1610, 10}, {380, 380})
     };
 
     sprite.setTextureRect(idleFrames[0]);
-    sprite.setPosition({200.f, 500.f});
+    sprite.setPosition({550.f, 400.f});
 }
 
 void Player::setState(PlayerState new_state) {

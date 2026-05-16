@@ -60,5 +60,5 @@ string Song::getName() const {
 }
 
 float Song::getSpeedMultiplier() const {
-    return getChart().getSpeedMultiplier();
+    return chart.getSpeedMultiplier();
 }

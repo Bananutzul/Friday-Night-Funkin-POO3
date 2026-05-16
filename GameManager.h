@@ -34,6 +34,8 @@ private:
     float travelTime = 550 / 200.f * 1000.f;
     int misses = 0;
 
+    bool hasReleasedDir[4] = {true, true, true, true}; // buffer pt a rezolva problema de miss fals
+
     float gameTimeMs = 0.f;
     float introDurationMs = 0.f;
     bool songStarted = false;
@@ -51,8 +53,10 @@ private:
     sf::Texture playerTexture;
     unique_ptr<Player> player;
 
-    sf::Texture backgroundTexture;
-    unique_ptr<sf::Sprite> background;
+    sf::Texture backgroundTexture1;
+    sf::Texture backgroundTexture2;
+    unique_ptr<sf::Sprite> background1;
+    unique_ptr<sf::Sprite> background2;
 public:
     static GameManager* getInstance() {
         if (instance == nullptr)

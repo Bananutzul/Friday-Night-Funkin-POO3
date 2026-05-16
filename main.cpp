@@ -12,56 +12,8 @@ int main() {
     gm->preloadTextures();
     gm->loadTargetZones();
 
-    HoldArrow arrow(
-        {1100.f, 600.f},
-        200.f,
-        Direction::RIGHT,
-        false,
-        gm->getTexture()["arrows"],
-        true,
-        2,
-        false
-    );
-
-    HoldArrow arrow2(
-    {950.f, 600.f},
-    200.f,
-    Direction::UP,
-    false,
-    gm->getTexture()["arrows"],
-    true,
-    4,
-    false
-);
-    HoldArrow arrow3(
-    {650.f, 600.f},
-    200.f,
-    Direction::LEFT,
-    false,
-    gm->getTexture()["arrows"],
-    true,
-    4,
-    false
-);
-    HoldArrow arrow4(
-    {800.f, 600.f},
-    200.f,
-    Direction::DOWN,
-    false,
-    gm->getTexture()["arrows"],
-    true,
-    4,
-    false
-);
-
-
-    gm->addNote(make_unique<HoldArrow>(arrow));
-    gm->addNote(make_unique<HoldArrow>(arrow2));
-    gm->addNote(make_unique<Arrow>(arrow3));
-    gm->addNote(make_unique<Arrow>(arrow4));
-
     Chart chart("bopeebo-chart.json", "hard");
-    auto song = make_unique<Song>("Dad Battle", "Inst.ogg", "Voices-bf.ogg", "Voices-dad.ogg", chart);
+    auto song = make_unique<Song>("Dad Battle", "Inst2.ogg", "Voices-bf2.ogg", "Voices-dad2.ogg", chart);
     gm->loadSong(std::move(song));
 
     sf::Clock clock;
@@ -116,8 +68,6 @@ int main() {
             perfect.setFillColor(sf::Color::Red);
 
         perfect.setString(aux);
-
-        cout << gm->getPerfect() << endl;
 
         window.draw(scoreText);
         window.draw(perfect);

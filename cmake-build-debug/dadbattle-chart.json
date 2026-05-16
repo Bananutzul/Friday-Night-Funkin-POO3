@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "scrollSpeed": { "easy": 1.6, "normal": 1.8, "hard": 2.3 },
+  "speed": { "easy": 1.6, "normal": 1.8, "hard": 2.3 },
   "notes": {
     "easy": [
       { "t": 10666, "d": 6 },

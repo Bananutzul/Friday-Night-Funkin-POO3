@@ -8,7 +8,7 @@
 using namespace std;
 
 Chart::Chart() {
-    difficulty = "N/A";
+    difficulty = "hard";
 }
 
 Chart::Chart(const string& filename, const string difficulty) {
@@ -21,7 +21,7 @@ Chart::Chart(const string& filename, const string difficulty) {
 
         json data = json::parse(fin);
 
-        speedMultiplier = (float)data["scrollSpeed"][difficulty];
+        speedMultiplier = data["speed"][difficulty].get<float>();
 
         for (auto& note : data["notes"][difficulty]) {
             int d = note["d"];
@@ -60,6 +60,7 @@ Chart::Chart(const Chart& obj) {
 
     player_notes = obj.player_notes;
     opponent_notes = obj.opponent_notes;
+    speedMultiplier = obj.speedMultiplier;
 
     difficulty = obj.difficulty;
 }
@@ -73,6 +74,7 @@ Chart& Chart::operator=(const Chart& obj) {
 
     player_notes = obj.player_notes;
     opponent_notes = obj.opponent_notes;
+    speedMultiplier = obj.speedMultiplier;
 
     difficulty = obj.difficulty;
 

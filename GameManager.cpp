@@ -11,8 +11,6 @@ void GameManager::checkHit(Direction dir) {
     Arrow* closest = nullptr;
     float minOffset = 9999.f;
 
-    cout << player_arrows.size() << endl;
-
     for (auto& note : player_arrows) {
         if (note->getIsPlayerNote()) {
             if (note->getDirection() == dir && note->getPosition().y >= -15.f) {
@@ -31,6 +29,9 @@ void GameManager::checkHit(Direction dir) {
     }
 
     if (closest && minOffset <= 90.f) {
+
+        hasReleasedDir[(int)dir] = false;
+
         if (abs(minOffset) <= 15.f)
             perfect = "Perfect!", score += 250;
         else if (abs(minOffset) <= 40.f)
@@ -43,6 +44,7 @@ void GameManager::checkHit(Direction dir) {
         closest->setIsPressed(true);
     }
     else if (closest && minOffset <= 250.f) {
+        hasReleasedDir[(int)dir] = false;
         perfect = "Miss!";
         if (player) player->setState(PlayerState::MISS);
         misses++;
@@ -70,7 +72,9 @@ void GameManager::checkHold(Direction dir) {
         }
     }
 
-    if (closest && minOffset <= 90.f) {
+    if (closest && minOffset <= 90.f && hasReleasedDir[(int)dir] == true) {
+        hasReleasedDir[(int)dir] = false;
+
         if (abs(minOffset) <= 15.f)
             perfect = "Perfect!", score += 250;
         else if (abs(minOffset) <= 40.f)
@@ -83,7 +87,8 @@ void GameManager::checkHold(Direction dir) {
         closest->setIsHeld(true);
         score += 50;
 
-    }else if (closest && minOffset <= 250.f && closest->getHasBeenHeld() == false) {
+    }else if (closest && minOffset <= 250.f && closest->getHasBeenHeld() == false && hasReleasedDir[(int)dir] == true) {
+        hasReleasedDir[(int)dir] = false;
         closest->setHasBeenHeld(true);
         perfect = "Miss!";
         if (player) player->setState(PlayerState::MISS);
@@ -92,13 +97,13 @@ void GameManager::checkHold(Direction dir) {
 }
 
 void GameManager::handleHeldInput() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
         checkHold(Direction::LEFT);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
         checkHold(Direction::DOWN);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
         checkHold(Direction::RIGHT);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
         checkHold(Direction::UP);
 }
 
@@ -108,16 +113,20 @@ void GameManager::handleInput(sf::Event event) {
         bool valid = true;
 
         switch (keyEvent->code) {
-            case sf::Keyboard::Key::A :
+            case sf::Keyboard::Key::A:
+            case sf::Keyboard::Key::Left:
                 dir = Direction::LEFT;
                 break;
-            case sf::Keyboard::Key::S :
+            case sf::Keyboard::Key::S:
+            case sf::Keyboard::Key::Down:
                 dir = Direction::DOWN;
                 break;
-            case sf::Keyboard::Key::D :
+            case sf::Keyboard::Key::D:
+            case sf::Keyboard::Key::Right:
                 dir = Direction::RIGHT;
                 break;
-            case sf::Keyboard::Key::W :
+            case sf::Keyboard::Key::W:
+            case sf::Keyboard::Key::Up:
                 dir = Direction::UP;
                 break;
             default:
@@ -125,7 +134,7 @@ void GameManager::handleInput(sf::Event event) {
                 break;
         }
 
-        if (valid){
+        if (valid && hasReleasedDir[(int)dir] == true){
             checkHit(dir);
         }
     }
@@ -136,15 +145,19 @@ void GameManager::handleInput(sf::Event event) {
 
         switch (keyEvent->code) {
             case sf::Keyboard::Key::A:
+            case sf::Keyboard::Key::Left:
                 dir = Direction::LEFT;
                 break;
             case sf::Keyboard::Key::S:
+            case sf::Keyboard::Key::Down:
                 dir = Direction::DOWN;
                 break;
             case sf::Keyboard::Key::W:
+            case sf::Keyboard::Key::Up:
                 dir = Direction::UP;
                 break;
             case sf::Keyboard::Key::D:
+            case sf::Keyboard::Key::Right:
                 dir = Direction::RIGHT;
                 break;
             default:
@@ -154,6 +167,7 @@ void GameManager::handleInput(sf::Event event) {
 
         if (valid) {
             releaseHold(dir);
+            hasReleasedDir[(int)dir]= true;
             perfect = "";
         }
     }
@@ -167,8 +181,6 @@ void GameManager::releaseHold(Direction dir) {
 }
 
 void GameManager::update(float dt) {
-
-    cout << curr_song->getSpeedMultiplier();
 
     if (!songStarted) {
         gameTimeMs += 1000.f * dt;
@@ -211,10 +223,24 @@ void GameManager::update(float dt) {
     }
 
     for (auto& note : player_holdarrows) {
-        if (note->isOffScreen()) {
-            perfect = "Miss!";
-            player->setState(PlayerState::MISS);
-            misses++;
+        if (!note->getHasBeenTriggered()) {
+            if (note->isFinished()) {
+                note->setHasBeenTriggered(true);
+
+                if (!note->getHeldEnough()) {
+                    perfect = "Miss!";
+                    player->setState(PlayerState::MISS);
+                    misses++;
+                }
+            }else if (note->isOffScreen()) {
+                note->setHasBeenTriggered(true);
+
+                if (!note->getHeldEnough()) {
+                    perfect = "Miss!";
+                    player->setState(PlayerState::MISS);
+                    misses++;
+                }
+            }
         }
     }
 
@@ -239,8 +265,11 @@ void GameManager::update(float dt) {
 
 void GameManager::draw(sf::RenderWindow& window) {
 
-    if (background)
-        window.draw(*background);
+    if (background1)
+        window.draw(*background1);
+
+    if (background2)
+        window.draw(*background2);
 
     if (player) {
         player->draw(window);
@@ -358,11 +387,17 @@ void GameManager::preloadTextures() {
         cout << "Eroare la incarcarea sprite sheet-ului pt player!\n";
     }
 
-    if (backgroundTexture.loadFromFile("stageback.png")) {
-        background = make_unique<sf::Sprite>(backgroundTexture);
-        background->setScale({1300.f / backgroundTexture.getSize().x, 700.f / backgroundTexture.getSize().y});
+    if (backgroundTexture1.loadFromFile("stageback.png")) {
+        background1 = make_unique<sf::Sprite>(backgroundTexture1);
+        background1->setScale({1300.f / backgroundTexture1.getSize().x, 700.f / backgroundTexture1.getSize().y});
     }
-    else cout << "Eroare la incarcarea sprite-ului pt background!\n";
+    else cout << "Eroare la incarcarea sprite-ului pt background layer 1!\n";
+
+    if (backgroundTexture2.loadFromFile("bg.png")) {
+        background2 = make_unique<sf::Sprite>(backgroundTexture2);
+        background2->setScale({1300.f / backgroundTexture2.getSize().x, 700.f / backgroundTexture2.getSize().y});
+    }
+    else cout << "Eroare la incarcarea sprite-ului pt background layer 2!\n";
 }
 
 map<string, sf::Texture> GameManager::getTexture() const {

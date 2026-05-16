@@ -72,14 +72,19 @@ HoldArrow::HoldArrow(const HoldArrow &obj) : Arrow(obj){
 HoldArrow::~HoldArrow(){};
 
 void HoldArrow::update(float dt) {
+
+
     if (getIsPlayerNote() == false && position.y <= 3.5f) {
-        position.y -= 0;
+        setIsHeld(true);
         current_time_held += dt;
     }
-    else if (!isHeld) {
-        position.y -= speed * dt;
-    }else {
+
+    if (isHeld) {
+        position.y -= 0.f;
+        increaseDurationHeld(dt);
         current_time_held += dt;
+    }else {
+        position.y -= speed * dt;
     }
 
     line_position.y -= speed * dt;
@@ -131,6 +136,25 @@ void HoldArrow::setHasBeenHeld(bool val) {
 bool HoldArrow::getHasBeenHeld() const {
     return hasBeenHeld;
 }
+
+void HoldArrow::setHasBeenTriggered(bool val) {
+    hasBeenTriggered = val;
+}
+
+bool HoldArrow::getHasBeenTriggered() const {
+    return hasBeenTriggered;
+}
+
+void HoldArrow::increaseDurationHeld(float dt) {
+    durationHeld += dt;
+}
+
+bool HoldArrow::getHeldEnough() {
+    return durationHeld >= 0.8f * duration;
+}
+
+
+
 
 
 

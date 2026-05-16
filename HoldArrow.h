@@ -13,6 +13,8 @@ class HoldArrow : public Arrow {
 private:
     sf::Vector2f line_position = position;
     float duration;
+    float durationHeld = 0.f;
+    bool hasBeenTriggered = false;
     bool isHeld;
     bool hasBeenHeld = false;
     bool miss = false;
@@ -40,4 +42,8 @@ public:
     void updateHeldTimer(float dt);
     void setHasBeenHeld(bool val);
     bool getHasBeenHeld() const;
+    void setHasBeenTriggered(bool val);
+    bool getHasBeenTriggered() const;
+    void increaseDurationHeld(float dt);
+    bool getHeldEnough(); // functie pt a considera ca hit si notele hold tinute cel putin 80% din durata lor totala
 };

@@ -18,7 +18,7 @@ private:
 
     int curr_frame = 0;
     float frameTimer = 0.f;
-    float frameDuration = 0.08f;
+    float frameDuration = 0.12f;
     PlayerState curr_state = PlayerState::IDLE;
 
 public:

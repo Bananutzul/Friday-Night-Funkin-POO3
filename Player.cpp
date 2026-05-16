@@ -6,6 +6,8 @@ using namespace std;
 
 Player::Player(sf::Texture& texture) : sprite(texture){
 
+    sprite.setScale({0.25f, 0.25f});
+
     idleFrames = {
         sf::IntRect({10, 10}, {390, 390}),
         sf::IntRect({410, 10}, {390, 390}),
@@ -18,8 +20,8 @@ Player::Player(sf::Texture& texture) : sprite(texture){
     };
 
     hitFrames = {
-        sf::IntRect({810, 810}, {400, 390}),
-        sf::IntRect({1210, 810}, {400, 390})
+        sf::IntRect({1210, 10}, {390, 390}),
+        sf::IntRect({1610, 10}, {390, 390})
     };
 
     sprite.setTextureRect(idleFrames[0]);

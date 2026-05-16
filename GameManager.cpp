@@ -38,11 +38,15 @@ void GameManager::checkHit(Direction dir) {
         else if (abs(minOffset) <= 90.f)
             perfect = "Good!";
 
+        if (player) player->setState(PlayerState::HIT);
+
         closest->setIsPressed(true);
         score += 100;
     }
-    else if (closest && minOffset <= 250.f)
+    else if (closest && minOffset <= 250.f) {
         perfect = "Miss!";
+        if (player) player->setState(PlayerState::MISS);
+    }
 }
 
 void GameManager::checkHold(Direction dir) {
@@ -74,11 +78,15 @@ void GameManager::checkHold(Direction dir) {
         else if (abs(minOffset) <= 90.f)
             perfect = "Good!";
 
+        if (player) player->setState(PlayerState::HIT);
+
         closest->setIsHeld(true);
         score += 50;
 
-    }else if (closest && minOffset <= 250.f)
+    }else if (closest && minOffset <= 250.f) {
         perfect = "Miss!";
+        if (player) player->setState(PlayerState::MISS);
+    }
 }
 
 void GameManager::handleHeldInput() {
@@ -181,6 +189,10 @@ void GameManager::update(float dt) {
     if (!playedGo && gameTimeMs >= -introDurationMs + beat * 3)
         soundGo->play(), playedGo = true;
 
+    if (player) {
+        player->update(dt);
+    }
+
     updateNotes(player_arrows, dt);
     updateNotes(player_holdarrows, dt);
     updateNotes(opponent_arrows, dt);
@@ -206,6 +218,10 @@ void GameManager::update(float dt) {
 }
 
 void GameManager::draw(sf::RenderWindow& window) {
+    if (player) {
+        player->draw(window);
+    }
+
     for (auto& note : player_arrows)
         note->draw(window);
     for (auto& hold : player_holdarrows)
@@ -311,6 +327,12 @@ void GameManager::preloadTextures() {
     sf::Texture texture;
     texture.loadFromFile("arrows.png");
     textures["arrows"] = std::move(texture);
+
+    if (playerTexture.loadFromFile("BOYFRIEND.png")) {
+        player = std::make_unique<Player>(playerTexture);
+    } else {
+        cout << "Eroare la incarcarea sprite sheet-ului pt player!\n";
+    }
 }
 
 map<string, sf::Texture> GameManager::getTexture() const {

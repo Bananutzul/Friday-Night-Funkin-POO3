@@ -11,6 +11,7 @@
 #include "Chart.h"
 #include "Song.h"
 #include "HoldArrow.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -45,6 +46,9 @@ private:
     int nextPlayerNote = 0, nextOpponentNote = 0; // indexi prin care tinem minte urmatoarea nota pe care trebuie sa o afisam
 
     map<string, sf::Texture> textures; // preload la texturi
+
+    sf::Texture playerTexture;
+    unique_ptr<Player> player;
 public:
     static GameManager* getInstance() {
         if (instance == nullptr)

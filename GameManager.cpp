@@ -42,6 +42,8 @@ void GameManager::checkHit(Direction dir) {
         if (player) player->setState(PlayerState::HIT);
 
         closest->setIsPressed(true);
+
+        targetZones[(int)dir].setState(targetState::HIT);
     }
     else if (closest && minOffset <= 250.f) {
         hasReleasedDir[(int)dir] = false;
@@ -135,6 +137,7 @@ void GameManager::handleInput(sf::Event event) {
         }
 
         if (valid && hasReleasedDir[(int)dir] == true){
+            targetZones[(int)dir].setState(targetState::PRESSED);
             checkHit(dir);
         }
     }
@@ -169,6 +172,8 @@ void GameManager::handleInput(sf::Event event) {
             releaseHold(dir);
             hasReleasedDir[(int)dir]= true;
             perfect = "";
+
+            targetZones[(int)dir].setState(targetState::IDLE);
         }
     }
 }
@@ -213,6 +218,10 @@ void GameManager::update(float dt) {
     updateNotes(player_holdarrows, dt);
     updateNotes(opponent_arrows, dt);
     updateNotes(opponent_holdarrows, dt);
+
+    for (auto& zone : targetZones) {
+        zone.updateTarget(dt);
+    }
 
     for (auto& note : player_arrows) {
         if (note->isOffScreen()) {

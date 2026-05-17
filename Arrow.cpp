@@ -99,7 +99,7 @@ Arrow::~Arrow() {}
 
 bool Arrow::isOffScreen() {
     if (isPlayerNote == false && dynamic_cast<HoldArrow*>(this) == nullptr)
-        return position.y <= 0.f;
+        return position.y <= -20.f;
     return position.y < -50.f;
 }
 
@@ -109,6 +109,9 @@ void Arrow::update(float dt) {
 }
 
 void Arrow::draw(sf::RenderWindow& window) {
+    if (!isVisible)
+        return;
+
     if (sprite.getScale() == sf::Vector2f({1.f, 1.f}))
         sprite.setScale({0.40f, 0.40f});
     window.draw(sprite);
@@ -170,8 +173,6 @@ void Arrow::setState(targetState new_state) {
                 break;
         }
     }else if (current_state == targetState::HIT) {
-        animationTimer = 0.f;
-
         switch (direction) {
             case Direction::LEFT:
                 sprite.setTextureRect(sf::IntRect({240, 180}, {200, 200}));
@@ -193,16 +194,18 @@ void Arrow::setState(targetState new_state) {
     }
 }
 
-void Arrow::updateTarget(float dt) {
-    if (current_state == targetState::HIT) {
-        animationTimer += dt;
-
-        if (animationTimer >= animationDuration) {
-            current_state = targetState::IDLE;
-            sprite.setTextureRect(idleRect);
-        }
-    }
+void Arrow::setIsVisible(bool val) {
+    isVisible = val;
 }
+
+bool Arrow::getIsVisible() const {
+    return isVisible;
+}
+
+targetState Arrow::getState() {
+    return current_state;
+}
+
 
 
 

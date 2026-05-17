@@ -94,15 +94,25 @@ void HoldArrow::update(float dt) {
 }
 
 void HoldArrow::updateLine(float dt) {
-    for (int i = 0; i < lineTiles.size(); i++)
-        lineTiles[i].setPosition({line_position.x + 28.f, line_position.y + 40.f + i * tileHeight});
+    for (int i = 0; i < lineTiles.size(); i++) {
+        if (!isHeld)
+            lineTiles[i].setPosition({line_position.x + 25.f, line_position.y + 25.f + i * tileHeight});
+        else
+            lineTiles[i].setPosition({line_position.x + 25.f, line_position.y + 20.f + i * tileHeight});
+    }
 }
 
 void HoldArrow::draw(sf::RenderWindow& window) {
-    for (auto& tile : lineTiles)
+    for (auto& tile : lineTiles) {
+        tile.setScale({0.4f, 0.4f});
+        if (isHeld)
+            tile.setScale({0.3f, 0.3f});
         window.draw(tile);
-    sprite.setScale({0.5f, 0.5f});
-    window.draw(sprite);
+    }
+    sprite.setScale({0.4f, 0.4f});
+
+    if (getIsVisible())
+        window.draw(sprite);
 }
 
 void HoldArrow::setIsHeld(bool val) {

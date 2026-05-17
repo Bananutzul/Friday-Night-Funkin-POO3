@@ -18,9 +18,9 @@ protected:
     bool isPressed;
     bool isPlayerNote;
 
+    bool isVisible = true;
+
     targetState current_state = targetState::IDLE;
-    float animationTimer = 0.f;
-    float animationDuration = 0.15f;
     sf::IntRect idleRect; // sprite sheet cutout-ul pt target zone idle (adica cand sunt gri)
 
     void initShape(const sf::Texture& texture);
@@ -34,12 +34,16 @@ public:
     // animatii pt target zones
     void setState(targetState new_state);
     void updateTarget(float dt);
+    targetState getState();
 
     sf::Sprite& getSprite();
 
     bool isOffScreen();
     void update(float dt) override;
     void draw(sf::RenderWindow& window) override;
+
+    void setIsVisible(bool val);
+    bool getIsVisible() const;
 
     Direction getDirection() const;
     sf::Vector2f getPosition() const;

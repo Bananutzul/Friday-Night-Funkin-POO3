@@ -87,6 +87,8 @@ void GameManager::checkHold(Direction dir) {
         if (player) player->setState(PlayerState::HIT);
 
         closest->setIsHeld(true);
+        targetZones[(int)dir].setState(targetState::HIT);
+        closest->setIsVisible(false);
         score += 50;
 
     }else if (closest && minOffset <= 250.f && closest->getHasBeenHeld() == false && hasReleasedDir[(int)dir] == true) {
@@ -172,7 +174,6 @@ void GameManager::handleInput(sf::Event event) {
             releaseHold(dir);
             hasReleasedDir[(int)dir]= true;
             perfect = "";
-
             targetZones[(int)dir].setState(targetState::IDLE);
         }
     }
@@ -219,10 +220,6 @@ void GameManager::update(float dt) {
     updateNotes(opponent_arrows, dt);
     updateNotes(opponent_holdarrows, dt);
 
-    for (auto& zone : targetZones) {
-        zone.updateTarget(dt);
-    }
-
     for (auto& note : player_arrows) {
         if (note->isOffScreen()) {
             perfect = "Miss!";
@@ -250,6 +247,55 @@ void GameManager::update(float dt) {
                     misses++;
                 }
             }
+        }
+    }
+
+    bool justPressed[4] = {false, false, false, false};
+
+    for (auto& note : opponent_arrows) {
+        Direction dir = note->getDirection();
+
+        if (note->getPosition().y <= 0) {
+            targetZones[(int)dir + 4].setState(targetState::HIT);
+            note->setIsVisible(false);
+            justPressed[(int)dir] = true;
+        }
+    }
+
+    for (auto& note : opponent_holdarrows) {
+        Direction dir = note->getDirection();
+
+        if (note->getPosition().y <= 0.f) {
+            targetZones[(int)dir + 4].setState(targetState::HIT);
+            note->setIsVisible(false);
+            note->setIsHeld(true);
+            justPressed[(int)dir] = true;
+        }
+    }
+
+    for (int i = 4; i < 8; i++) {
+        if (justPressed[i - 4])
+            continue;
+
+        if (targetZones[i].getState() == targetState::HIT) {
+            bool playing = false; // bool pt verificare daca mai sunt note pe targetzone
+
+            for (auto& note : opponent_arrows) {
+                if (note->getDirection() == targetZones[i].getDirection() && note->getPosition().y <= 0.f && note->getIsPlayerNote() == false) {
+                    playing = true;
+                    break;
+                }
+            }
+
+            for (auto& note : opponent_holdarrows) {
+                if (note->getDirection() == targetZones[i].getDirection() && note->getIsHeld() && !note->isFinished()) {
+                    playing = true;
+                    break;
+                }
+            }
+
+            if (!playing)
+                targetZones[i].setState(targetState::IDLE);
         }
     }
 

@@ -39,6 +39,9 @@ void GameManager::checkHit(Direction dir) {
         else if (abs(minOffset) <= 90.f)
             perfect = "Good!", score += 100;
 
+        if (perfect == "Perfect!" || perfect == "Great!")
+            spawnHitSplash(targetZones[(int)dir].getPosition(), dir);
+
         if (player) player->setState(PlayerState::HIT);
 
         closest->setIsPressed(true);
@@ -85,6 +88,9 @@ void GameManager::checkHold(Direction dir) {
             perfect = "Good!", score += 100;
 
         if (player) player->setState(PlayerState::HIT);
+
+        if (perfect == "Perfect!" || perfect == "Great!")
+            spawnHitSplash(targetZones[(int)dir].getPosition(), dir);
 
         closest->setIsHeld(true);
         targetZones[(int)dir].setState(targetState::HIT);
@@ -273,6 +279,9 @@ void GameManager::update(float dt) {
         }
     }
 
+    for (auto& splash : hitSplashes)
+        splash.update(dt);
+
     for (int i = 4; i < 8; i++) {
         if (justPressed[i - 4])
             continue;
@@ -315,6 +324,10 @@ void GameManager::update(float dt) {
         return note->isOffScreen() || note->isFinished();
     });
 
+    hitSplashes.erase(
+        remove_if(hitSplashes.begin(), hitSplashes.end(), [](HitSplash& a) {
+        return a.isFinished();
+    }), hitSplashes.end());
 
 }
 
@@ -338,6 +351,9 @@ void GameManager::draw(sf::RenderWindow& window) {
         note->draw(window);
     for (auto& hold : opponent_holdarrows)
         hold->draw(window);
+
+    for (auto& splash : hitSplashes)
+        splash.draw(window);
 }
 
 int GameManager::getScore() const {
@@ -435,6 +451,7 @@ void GameManager::spawnNotes() {
 void GameManager::preloadTextures() {
     sf::Texture texture;
     texture.loadFromFile("arrows.png");
+    splashTexture.loadFromFile("arrows.png");
     textures["arrows"] = std::move(texture);
 
     if (playerTexture.loadFromFile("BOYFRIEND.png")) {
@@ -497,3 +514,8 @@ string GameManager::getPerfect() const {
 int GameManager::getMisses() const {
     return misses;
 }
+
+void GameManager::spawnHitSplash(sf::Vector2f position, Direction dir) {
+    hitSplashes.push_back(HitSplash(position, splashTexture, dir));
+}
+

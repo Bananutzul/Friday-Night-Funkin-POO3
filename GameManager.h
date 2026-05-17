@@ -12,6 +12,7 @@
 #include "Song.h"
 #include "HoldArrow.h"
 #include "Player.h"
+#include "HitSplash.h"
 
 using namespace std;
 
@@ -57,6 +58,9 @@ private:
     sf::Texture backgroundTexture2;
     unique_ptr<sf::Sprite> background1;
     unique_ptr<sf::Sprite> background2;
+
+    vector<HitSplash> hitSplashes;
+    sf::Texture splashTexture;
 public:
     static GameManager* getInstance() {
         if (instance == nullptr)
@@ -104,4 +108,6 @@ public:
 
     void addNote(unique_ptr<Arrow> note);
     void addNote(unique_ptr<HoldArrow> note);
+
+    void spawnHitSplash(sf::Vector2f position, Direction dir);
 };

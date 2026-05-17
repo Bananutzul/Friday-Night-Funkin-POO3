@@ -22,4 +22,5 @@ public:
     HitSplash(sf::Vector2f position, sf::Texture& texture, Direction& dir);
     void update(float dt);
     void draw(sf::RenderWindow& window);
+    bool isFinished();
 };

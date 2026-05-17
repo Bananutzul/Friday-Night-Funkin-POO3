@@ -215,7 +215,7 @@ void GameManager::update(float dt) {
     if (!played3 && gameTimeMs >= -introDurationMs + beat * 2)
         sound3->play(), played3 = true;
     if (!playedGo && gameTimeMs >= -introDurationMs + beat * 3)
-        soundGo->play(), playedGo = true;
+        soundGo->play(), playedGo = true, countdown_finished = true;
 
     if (player) {
         player->update(dt);
@@ -519,3 +519,18 @@ void GameManager::spawnHitSplash(sf::Vector2f position, Direction dir) {
     hitSplashes.push_back(HitSplash(position, splashTexture, dir));
 }
 
+void GameManager::resumeMusic() {
+    curr_song->play();
+}
+
+void GameManager::pauseMusic() {
+    curr_song->pause();
+}
+
+void GameManager::stopMusic() {
+    curr_song->stop();
+}
+
+bool GameManager::getCountdownFinished() const {
+    return countdown_finished;
+}

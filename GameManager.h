@@ -42,7 +42,7 @@ private:
     bool songStarted = false;
     sf::SoundBuffer buf3, buf2, buf1, bufGo;
     sf::Sound* sound3 = nullptr, *sound2 = nullptr, *sound1 = nullptr, *soundGo = nullptr;
-    bool played1 = false, played2 = false, played3 = false, playedGo = false;
+    bool played1 = false, played2 = false, played3 = false, playedGo = false, countdown_finished = false;
 
     vector<Note> playerNotes;
     vector<Note> opponentNotes;
@@ -87,6 +87,12 @@ public:
     void preloadTextures();
     void loadTargetZones();
     void drawTargetZones(sf::RenderWindow& window);
+
+    void resumeMusic();
+    void pauseMusic();
+    void stopMusic();
+
+    bool getCountdownFinished() const;
 
     template<typename T>
     void updateNotes(vector<unique_ptr<T>>& notes, float dt) {

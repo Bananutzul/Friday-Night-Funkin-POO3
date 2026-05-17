@@ -13,12 +13,13 @@ Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
     font.openFromFile("font.ttf");
     selectedItemIndex = 2;
     selectedSongIndex = 0;
+    selectedPauseIndex = 0;
 
     songFiles = {"dadbattle-chart.json", "bopeebo-chart.json"};
 
     sf::Text song1(font, "SONG 1", 60), song2(font, "SONG 2", 60);
-    song1.setPosition({580, 200});
-    song2.setPosition({580, 300});
+    song1.setPosition({550, 200});
+    song2.setPosition({550, 300});
     song1.setFillColor(sf::Color::Cyan);
     song2.setFillColor(sf::Color::White);
 
@@ -42,6 +43,15 @@ Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
     texts.push_back(title2);
     texts.push_back(play);
     texts.push_back(exit);
+
+    sf::Text resume(font, "RESUME", 50), exit2(font, "EXIT", 50);
+    resume.setFillColor(sf::Color::White);
+    resume.setPosition({20, 250});
+    exit2.setFillColor(sf::Color::White);
+    exit2.setPosition({20, 350});
+
+    pauseOptions.push_back(resume);
+    pauseOptions.push_back(exit2);
 }
 
 void Menu::moveUp() {
@@ -68,6 +78,19 @@ void Menu::moveSongUp() {
     }
 }
 
+void Menu::movePauseUp() {
+    if (selectedPauseIndex - 1 >= 0) {
+        pauseOptions[selectedPauseIndex].setFillColor(sf::Color::White);
+        selectedPauseIndex--;
+        pauseOptions[selectedPauseIndex].setFillColor(sf::Color::Cyan);
+    } else {
+        pauseOptions[selectedPauseIndex].setFillColor(sf::Color::White);
+        selectedPauseIndex = 1;
+        pauseOptions[selectedPauseIndex].setFillColor(sf::Color::Cyan);
+    }
+}
+
+
 void Menu::moveDown() {
     if (selectedItemIndex + 1 == 4) {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
@@ -89,6 +112,18 @@ void Menu::moveSongDown() {
         songs[selectedSongIndex].setFillColor(sf::Color::White);
         selectedSongIndex = 0;
         songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+    }
+}
+
+void Menu::movePauseDown() {
+    if (selectedPauseIndex + 1 < pauseOptions.size()) {
+        pauseOptions[selectedPauseIndex].setFillColor(sf::Color::White);
+        selectedPauseIndex++;
+        pauseOptions[selectedPauseIndex].setFillColor(sf::Color::Cyan);
+    } else {
+        pauseOptions[selectedPauseIndex].setFillColor(sf::Color::White);
+        selectedPauseIndex = 0;
+        pauseOptions[selectedPauseIndex].setFillColor(sf::Color::Cyan);
     }
 }
 
@@ -122,6 +157,22 @@ void Menu::handleInputSong(sf::Event event) {
         }
     }
 }
+
+void Menu::handleInputPause(sf::Event event) {
+    if (const auto& keyEvent = event.getIf<sf::Event::KeyPressed>()) {
+        switch (keyEvent->code) {
+            case sf::Keyboard::Key::Down:
+                movePauseDown();
+                break;
+            case sf::Keyboard::Key::Up:
+                movePauseUp();
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 
 bool Menu::runMenuLoop() {
     while (window.isOpen()) {
@@ -160,6 +211,9 @@ void Menu::runSongSelectMenuLoop() {
             handleInputSong(*event);
 
             if (const auto& keyEvent = event->getIf<sf::Event::KeyPressed>()) {
+                if (keyEvent->code == sf::Keyboard::Key::Escape)
+                    return;
+
                 if (keyEvent->code == sf::Keyboard::Key::Enter) {
                     if (selectedSongIndex == 0)
                         runGameplayLoop(1);
@@ -198,6 +252,7 @@ void Menu::runGameplayLoop(int songIndex) {
     gm->loadSong(move(song));
 
     sf::Clock clock;
+    bool isPaused = false;
 
     sf::Text scoreText(font);
     scoreText.setCharacterSize(24);
@@ -220,12 +275,41 @@ void Menu::runGameplayLoop(int songIndex) {
             if (event->is<sf::Event::Closed>())
                 window.close();
 
-            gm->handleInput(*event);
+            if (const auto& keyEvent = event->getIf<sf::Event::KeyPressed>()) {
+                if (keyEvent->code == sf::Keyboard::Key::Escape && gm->getCountdownFinished()) {
+                    isPaused = !isPaused;
+
+                    if (isPaused) {
+                        gm->pauseMusic();
+                    }else {
+                        gm->resumeMusic();
+                    }
+                }
+
+                if (isPaused) {
+                    if (keyEvent->code == sf::Keyboard::Key::Enter) {
+                        if (selectedPauseIndex == 0) {
+                            isPaused = false;
+                            gm->resumeMusic();
+                        }else {
+                            gm->stopMusic();
+                            return;
+                        }
+                    }
+                }
+            }
+
+            if (!isPaused)
+                gm->handleInput(*event);
+            else
+                handleInputPause(*event);
         }
 
-        gm->handleHeldInput();
-        gm->spawnNotes();
-        gm->update(dt);
+        if (!isPaused) {
+            gm->handleHeldInput();
+            gm->spawnNotes();
+            gm->update(dt);
+        }
 
         window.clear(sf::Color::Black);
         gm->draw(window);
@@ -242,6 +326,16 @@ void Menu::runGameplayLoop(int songIndex) {
 
         perfect.setString(aux);
 
+        if (isPaused) {
+            sf::RectangleShape dimOverlay({1500.f, 600.f});
+            dimOverlay.setFillColor(sf::Color(0, 0, 0, 150));
+            window.draw(dimOverlay);
+
+            for (auto& item : pauseOptions) {
+                window.draw(item);
+            }
+        }
+
         window.draw(scoreText);
         window.draw(perfect);
         window.draw(misses);
@@ -251,8 +345,11 @@ void Menu::runGameplayLoop(int songIndex) {
 
 
 void Menu::runMenu() {
-    bool start = runMenuLoop();
+    while (window.isOpen()) {
+        bool start = runMenuLoop();
 
-    while (start && window.isOpen())
-        runSongSelectMenuLoop();
+        if (start)
+            runSongSelectMenuLoop();
+        else break;
+    }
 }

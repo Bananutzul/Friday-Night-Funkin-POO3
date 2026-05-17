@@ -43,6 +43,12 @@ void Song::stop() {
     dadVoice.stop();
 }
 
+void Song::pause() {
+    instrumental.pause();
+    bfVoice.pause();
+    dadVoice.pause();
+}
+
 float Song::getTimeMs() {
     return instrumental.getPlayingOffset().asMilliseconds();
 }

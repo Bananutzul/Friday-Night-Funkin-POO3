@@ -22,6 +22,9 @@ private:
     int selectedSongIndex;
     vector<string> songFiles;
 
+    vector<sf::Text> pauseOptions;
+    int selectedPauseIndex;
+
     bool runMenuLoop();
     void runSongSelectMenuLoop();
     void runGameplayLoop(int songIndex);
@@ -30,8 +33,11 @@ private:
     void moveDown();
     void moveSongUp();
     void moveSongDown();
+    void movePauseUp();
+    void movePauseDown();
     void handleInput(sf::Event event);
     void handleInputSong(sf::Event event);
+    void handleInputPause(sf::Event event);
 public:
     Menu();
 

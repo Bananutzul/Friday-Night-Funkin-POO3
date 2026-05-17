@@ -25,7 +25,8 @@ add_executable(FNF main.cpp
         Player.h
         Player.cpp
         HitSplash.h
-        HitSplash.cpp)
+        HitSplash.cpp
+        Menu.cpp)
 
 target_include_directories(FNF PRIVATE
         "/opt/homebrew/Cellar/sfml/3.0.2/include"

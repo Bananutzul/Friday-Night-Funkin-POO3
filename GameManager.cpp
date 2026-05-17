@@ -257,7 +257,7 @@ void GameManager::update(float dt) {
     });
 
     eraseNotes(opponent_holdarrows, [](const unique_ptr<HoldArrow>& note) {
-        return note->isOffScreen();
+        return note->isOffScreen() || note->isFinished();
     });
 
 
@@ -314,7 +314,8 @@ void GameManager::loadSong(unique_ptr<Song> song) {
 
     score = 0;
 
-    float beatDuration = 600.f;
+    int bpm = curr_song->getBpm();
+    float beatDuration = (60.f * 1000.f) / (float)bpm;
     introDurationMs = beatDuration * 4;
 
     gameTimeMs = -introDurationMs;

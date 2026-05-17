@@ -62,3 +62,7 @@ string Song::getName() const {
 float Song::getSpeedMultiplier() const {
     return chart.getSpeedMultiplier();
 }
+
+int Song::getBpm() const {
+    return chart.getBpm();
+}

@@ -23,6 +23,8 @@ Chart::Chart(const string& filename, const string difficulty) {
 
         speedMultiplier = data["speed"][difficulty].get<float>();
 
+        bpm = data["bpm"][difficulty].get<int>();
+
         for (auto& note : data["notes"][difficulty]) {
             int d = note["d"];
 
@@ -61,6 +63,7 @@ Chart::Chart(const Chart& obj) {
     player_notes = obj.player_notes;
     opponent_notes = obj.opponent_notes;
     speedMultiplier = obj.speedMultiplier;
+    bpm = obj.bpm;
 
     difficulty = obj.difficulty;
 }
@@ -75,6 +78,7 @@ Chart& Chart::operator=(const Chart& obj) {
     player_notes = obj.player_notes;
     opponent_notes = obj.opponent_notes;
     speedMultiplier = obj.speedMultiplier;
+    bpm = obj.bpm;
 
     difficulty = obj.difficulty;
 
@@ -91,6 +95,10 @@ vector<Note> Chart::getOpponentNotes() const {
 
 float Chart::getSpeedMultiplier() const {
     return speedMultiplier;
+}
+
+int Chart::getBpm() const {
+    return bpm;
 }
 
 

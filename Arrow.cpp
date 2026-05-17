@@ -1,4 +1,5 @@
 #include "Arrow.h"
+#include "HoldArrow.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
@@ -76,9 +77,9 @@ Arrow& Arrow::operator=(const Arrow& obj) {
 Arrow::~Arrow() {}
 
 bool Arrow::isOffScreen() {
-    if (isPlayerNote)
-        return position.y < -50.f;
-    else return position.y <= 0.f;
+    if (isPlayerNote == false && dynamic_cast<HoldArrow*>(this) == nullptr)
+        return position.y <= 0.f;
+    return position.y < -50.f;
 }
 
 void Arrow::update(float dt) {

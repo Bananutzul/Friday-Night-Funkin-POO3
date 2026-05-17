@@ -150,7 +150,7 @@ void HoldArrow::increaseDurationHeld(float dt) {
 }
 
 bool HoldArrow::getHeldEnough() {
-    return durationHeld >= 0.8f * duration;
+    return durationHeld >= 0.7f * duration;
 }
 
 

@@ -24,4 +24,5 @@ public:
     Chart getChart() const;
     string getName() const;
     float getSpeedMultiplier() const;
+    int getBpm() const;
 };

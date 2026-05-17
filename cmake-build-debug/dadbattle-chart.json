@@ -1,6 +1,7 @@
 {
   "version": "2.0.0",
   "speed": { "easy": 1.6, "normal": 1.8, "hard": 2.3 },
+  "bpm": {"hard" :  150},
   "notes": {
     "easy": [
       { "t": 10666, "d": 6 },

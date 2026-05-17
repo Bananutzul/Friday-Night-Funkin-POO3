@@ -12,7 +12,7 @@ int main() {
     gm->preloadTextures();
     gm->loadTargetZones();
 
-    Chart chart("bopeebo-chart.json", "hard");
+    Chart chart("dadbattle-chart.json", "hard");
     auto song = make_unique<Song>("Dad Battle", "Inst2.ogg", "Voices-bf2.ogg", "Voices-dad2.ogg", chart);
     gm->loadSong(std::move(song));
 

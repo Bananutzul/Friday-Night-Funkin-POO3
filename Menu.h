@@ -18,11 +18,18 @@ private:
     int selectedItemIndex;
     sf::RenderWindow window;
 
+    vector<sf::Text> songs;
+    int selectedSongIndex;
+    vector<string> songFiles;
+
     bool runMenuLoop();
+    int runSongSelectMenuLoop();
     void runGameplayLoop();
 
     void moveUp();
     void moveDown();
+    void moveSongUp();
+    void moveSongDown();
     void handleInput(sf::Event event);
 public:
     Menu();

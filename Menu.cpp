@@ -11,39 +11,54 @@ Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
     window.setFramerateLimit(60);
 
     font.openFromFile("font.ttf");
-    selectedItemIndex = 0;
+    selectedItemIndex = 2;
+    selectedSongIndex = 0;
 
-    sf::Text play(font, "PLAY", 60);
+    songFiles = {"dadbattle-chart.json", "bopeebo-chart.json"};
+
+    sf::Text song1(font, "SONG 1", 60), song2(font, "SONG 2", 60);
+    song1.setPosition({580, 200});
+    song2.setPosition({580, 300});
+
+    sf::Text title1(font, "FRIDAY NIGHT FUNKIN'", 90);
+    title1.setFillColor(sf::Color::Yellow);
+    title1.setPosition({130, 70});
+    sf::Text title2(font, "OOP Project 3 - Zamfir Horia", 50);
+    title2.setFillColor(sf::Color::White);
+    title2.setPosition({230, 190});
+    sf::Text play(font, "PLAY", 50);
     play.setFillColor(sf::Color::Yellow);
-    play.setPosition({750 - play.getLocalBounds().size.x / 2.f, 150});
-    sf::Text exit(font, "EXIT", 60);
+    play.setPosition({580, 300});
+    sf::Text exit(font, "EXIT", 35);
     exit.setFillColor(sf::Color::White);
-    exit.setPosition({750 - exit.getLocalBounds().size.x / 2.f, 400});
+    exit.setPosition({592, 400});
 
+    texts.push_back(title1);
+    texts.push_back(title2);
     texts.push_back(play);
     texts.push_back(exit);
 }
 
 void Menu::moveUp() {
-    if (selectedItemIndex - 1 >= 0) {
+    if (selectedItemIndex - 1 == 2) {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
         selectedItemIndex--;
         texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
     } else {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
-        selectedItemIndex = 1;
+        selectedItemIndex = 3;
         texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
     }
 }
 
 void Menu::moveDown() {
-    if (selectedItemIndex + 1 < texts.size()) {
+    if (selectedItemIndex + 1 == 4) {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
-        selectedItemIndex++;
+        selectedItemIndex = 2;
         texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
     } else {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
-        selectedItemIndex = 0;
+        selectedItemIndex = 3;
         texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
     }
 }
@@ -74,7 +89,7 @@ bool Menu::runMenuLoop() {
 
             if (const auto& keyEvent = event->getIf<sf::Event::KeyPressed>()) {
                 if (keyEvent->code == sf::Keyboard::Key::Enter) {
-                    if (selectedItemIndex == 0)
+                    if (selectedItemIndex == 2)
                         return true;
                     return false;
                 }
@@ -89,8 +104,64 @@ bool Menu::runMenuLoop() {
 }
 
 void Menu::runGameplayLoop() {
-    cout << "Game run\n";
-    return;
+    GameManager* gm = GameManager::getInstance();
+    gm->preloadTextures();
+    gm->loadTargetZones();
+
+    Chart chart("dadbattle-chart.json", "hard");
+    auto song = make_unique<Song>("Dad Battle", "Inst2.ogg", "Voices-bf2.ogg", "Voices-dad2.ogg", chart);
+    gm->loadSong(move(song));
+
+    sf::Clock clock;
+
+    sf::Text scoreText(font);
+    scoreText.setCharacterSize(24);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition({10.f, 30.f});
+
+    sf::Text perfect(font);
+    perfect.setCharacterSize(24);
+    perfect.setPosition({750.f, 40.f});
+
+    sf::Text misses(font);
+    misses.setCharacterSize(24);
+    misses.setPosition({10.f, 80.f});
+    misses.setFillColor(sf::Color::Red);
+
+    while (window.isOpen()) {
+        float dt = clock.restart().asSeconds();
+
+        while (const auto event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>())
+                window.close();
+
+            gm->handleInput(*event);
+        }
+
+        gm->handleHeldInput();
+        gm->spawnNotes();
+        gm->update(dt);
+
+        window.clear(sf::Color::Black);
+        gm->draw(window);
+        gm->drawTargetZones(window);
+
+        scoreText.setString("Score: " + to_string(gm->getScore()));
+        misses.setString("Misses: " + to_string(gm->getMisses()));
+        string aux = gm->getPerfect();
+
+        if (aux == "Perfect!") perfect.setFillColor(sf::Color::Green);
+        else if (aux == "Great!") perfect.setFillColor(sf::Color::Blue);
+        else if (aux == "Good!") perfect.setFillColor(sf::Color::Yellow);
+        else if (aux == "Miss!") perfect.setFillColor(sf::Color::Red);
+
+        perfect.setString(aux);
+
+        window.draw(scoreText);
+        window.draw(perfect);
+        window.draw(misses);
+        window.display();
+    }
 }
 
 

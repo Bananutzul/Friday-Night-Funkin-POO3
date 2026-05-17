@@ -361,7 +361,7 @@ int GameManager::getScore() const {
 }
 
 void GameManager::loadSong(unique_ptr<Song> song) {
-    curr_song = std::move(song);
+    curr_song = move(song);
 
     buf1.loadFromFile("intro1.ogg");
     sound1->setBuffer(buf3);
@@ -452,7 +452,7 @@ void GameManager::preloadTextures() {
     sf::Texture texture;
     texture.loadFromFile("arrows.png");
     splashTexture.loadFromFile("arrows.png");
-    textures["arrows"] = std::move(texture);
+    textures["arrows"] = move(texture);
 
     if (playerTexture.loadFromFile("BOYFRIEND.png")) {
         player = std::make_unique<Player>(playerTexture);
@@ -495,16 +495,16 @@ void GameManager::drawTargetZones(sf::RenderWindow &window) {
 
 void GameManager::addNote(unique_ptr<Arrow> note) {
     if (note->getIsPlayerNote())
-        player_arrows.push_back(std::move(note));
+        player_arrows.push_back(move(note));
     else
-        opponent_arrows.push_back(std::move(note));
+        opponent_arrows.push_back(move(note));
 }
 
 void GameManager::addNote(unique_ptr<HoldArrow> note) {
     if (note->getIsPlayerNote())
-        player_holdarrows.push_back(std::move(note));
+        player_holdarrows.push_back(move(note));
     else
-        opponent_holdarrows.push_back(std::move(note));
+        opponent_holdarrows.push_back(move(note));
 }
 
 string GameManager::getPerfect() const {

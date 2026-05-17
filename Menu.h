@@ -23,14 +23,15 @@ private:
     vector<string> songFiles;
 
     bool runMenuLoop();
-    int runSongSelectMenuLoop();
-    void runGameplayLoop();
+    void runSongSelectMenuLoop();
+    void runGameplayLoop(int songIndex);
 
     void moveUp();
     void moveDown();
     void moveSongUp();
     void moveSongDown();
     void handleInput(sf::Event event);
+    void handleInputSong(sf::Event event);
 public:
     Menu();
 

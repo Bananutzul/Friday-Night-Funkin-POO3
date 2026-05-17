@@ -19,6 +19,11 @@ Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
     sf::Text song1(font, "SONG 1", 60), song2(font, "SONG 2", 60);
     song1.setPosition({580, 200});
     song2.setPosition({580, 300});
+    song1.setFillColor(sf::Color::Cyan);
+    song2.setFillColor(sf::Color::White);
+
+    songs.push_back(song1);
+    songs.push_back(song2);
 
     sf::Text title1(font, "FRIDAY NIGHT FUNKIN'", 90);
     title1.setFillColor(sf::Color::Yellow);
@@ -51,6 +56,18 @@ void Menu::moveUp() {
     }
 }
 
+void Menu::moveSongUp() {
+    if (selectedSongIndex - 1 >= 0) {
+        songs[selectedSongIndex].setFillColor(sf::Color::White);
+        selectedSongIndex--;
+        songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+    } else {
+        songs[selectedSongIndex].setFillColor(sf::Color::White);
+        selectedSongIndex = 1;
+        songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+    }
+}
+
 void Menu::moveDown() {
     if (selectedItemIndex + 1 == 4) {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
@@ -62,6 +79,20 @@ void Menu::moveDown() {
         texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
     }
 }
+
+void Menu::moveSongDown() {
+    if (selectedSongIndex + 1 < songs.size()) {
+        songs[selectedSongIndex].setFillColor(sf::Color::White);
+        selectedSongIndex++;
+        songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+    } else {
+        songs[selectedSongIndex].setFillColor(sf::Color::White);
+        selectedSongIndex = 0;
+        songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+    }
+}
+
+
 void Menu::handleInput(sf::Event event) {
     if (const auto& keyEvent = event.getIf<sf::Event::KeyPressed>()) {
         switch (keyEvent->code) {
@@ -70,6 +101,21 @@ void Menu::handleInput(sf::Event event) {
                 break;
             case sf::Keyboard::Key::Up:
                 moveUp();
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void Menu::handleInputSong(sf::Event event) {
+    if (const auto& keyEvent = event.getIf<sf::Event::KeyPressed>()) {
+        switch (keyEvent->code) {
+            case sf::Keyboard::Key::Down:
+                moveSongDown();
+                break;
+            case sf::Keyboard::Key::Up:
+                moveSongUp();
                 break;
             default:
                 break;
@@ -96,20 +142,59 @@ bool Menu::runMenuLoop() {
             }
         }
         window.clear(sf::Color(20, 20, 20));
-        for (auto& item : texts) window.draw(item);
+        for (auto& item : texts)
+            window.draw(item);
         window.display();
     }
 
     return false;
 }
 
-void Menu::runGameplayLoop() {
+void Menu::runSongSelectMenuLoop() {
+    while (window.isOpen()) {
+        while (const auto event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+
+            handleInputSong(*event);
+
+            if (const auto& keyEvent = event->getIf<sf::Event::KeyPressed>()) {
+                if (keyEvent->code == sf::Keyboard::Key::Enter) {
+                    if (selectedSongIndex == 0)
+                        runGameplayLoop(1);
+                    else runGameplayLoop(2);
+
+                }
+            }
+        }
+        window.clear(sf::Color(20, 20, 20));
+        for (auto& item : songs)
+            window.draw(item);
+        window.display();
+    }
+}
+
+
+void Menu::runGameplayLoop(int songIndex) {
     GameManager* gm = GameManager::getInstance();
     gm->preloadTextures();
     gm->loadTargetZones();
 
-    Chart chart("dadbattle-chart.json", "hard");
-    auto song = make_unique<Song>("Dad Battle", "Inst2.ogg", "Voices-bf2.ogg", "Voices-dad2.ogg", chart);
+    unique_ptr<Chart> chart;
+
+    if (songIndex == 2)
+        chart = make_unique<Chart>("dadbattle-chart.json", "hard"), cout << 2;
+    else
+        chart = make_unique<Chart>("bopeebo-chart.json", "hard"), cout << 1;
+
+    unique_ptr<Song> song;
+
+    if (songIndex == 2)
+        song = make_unique<Song>("Dad Battle", "Inst2.ogg", "Voices-bf2.ogg", "Voices-dad2.ogg", *chart);
+    else
+        song = make_unique<Song>("Bopeebo", "Inst.ogg", "Voices-bf.ogg", "Voices-dad.ogg", *chart);
+
     gm->loadSong(move(song));
 
     sf::Clock clock;
@@ -169,5 +254,5 @@ void Menu::runMenu() {
     bool start = runMenuLoop();
 
     while (start && window.isOpen())
-        runGameplayLoop();
+        runSongSelectMenuLoop();
 }

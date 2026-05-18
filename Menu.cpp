@@ -268,6 +268,10 @@ void Menu::runGameplayLoop(int songIndex) {
     sf::Clock clock;
     bool isPaused = false;
 
+    bool isFading = false;
+    float fadeTimer = 0.f;
+    float fadeDuration = 3.f;
+
     sf::Text scoreText(font);
     scoreText.setCharacterSize(24);
     scoreText.setFillColor(sf::Color::White);
@@ -290,7 +294,7 @@ void Menu::runGameplayLoop(int songIndex) {
                 window.close();
 
             if (const auto& keyEvent = event->getIf<sf::Event::KeyPressed>()) {
-                if (keyEvent->code == sf::Keyboard::Key::Escape && gm->getCountdownFinished()) {
+                if (keyEvent->code == sf::Keyboard::Key::Escape && gm->getCountdownFinished() && isFading == false) {
                     isPaused = !isPaused;
 
                     if (isPaused) {
@@ -324,7 +328,11 @@ void Menu::runGameplayLoop(int songIndex) {
             gm->spawnNotes();
             gm->update(dt);
 
-            if (gm->getCurrTime() >= gm->getLastNoteTime())
+            if (gm->getCurrTime() >= gm->getLastNoteTime()) {
+                isFading = true;
+            }
+
+            if (fadeTimer >= fadeDuration)
                 return;
         }
 
@@ -356,6 +364,20 @@ void Menu::runGameplayLoop(int songIndex) {
         window.draw(scoreText);
         window.draw(perfect);
         window.draw(misses);
+
+        if (isFading) {
+            fadeTimer += dt;
+            float pct = fadeTimer / fadeDuration; // cat de opac e bazat pe cat timp a trecut din durata fade-ului
+            if (pct > 1.f)
+                pct = 1.f;
+
+            uint8_t alpha = static_cast<uint8_t>(pct * 255.f); // folosesc uint8_t pt ca e un standard in grafica
+
+            sf::RectangleShape fadeAway({1300.f, 600.f});
+            fadeAway.setFillColor(sf::Color(0, 0, 0, alpha));
+            window.draw(fadeAway);
+        }
+
         window.display();
     }
 }

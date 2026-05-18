@@ -10,6 +10,10 @@
 Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
     window.setFramerateLimit(60);
 
+    menuTexture.loadFromFile("menuBG.png");
+    menuBackground = make_unique<sf::Sprite>(menuTexture);
+    menuBackground->setScale({1300.f / menuTexture.getSize().x, 700.f / menuTexture.getSize().y});
+
     font.openFromFile("font.ttf");
     selectedItemIndex = 2;
     selectedSongIndex = 0;
@@ -20,20 +24,20 @@ Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
     sf::Text song1(font, "SONG 1", 60), song2(font, "SONG 2", 60);
     song1.setPosition({550, 200});
     song2.setPosition({550, 300});
-    song1.setFillColor(sf::Color::Cyan);
+    song1.setFillColor(sf::Color::Black);
     song2.setFillColor(sf::Color::White);
 
     songs.push_back(song1);
     songs.push_back(song2);
 
     sf::Text title1(font, "FRIDAY NIGHT FUNKIN'", 90);
-    title1.setFillColor(sf::Color::Yellow);
+    title1.setFillColor(sf::Color::Black);
     title1.setPosition({130, 70});
     sf::Text title2(font, "OOP Project 3 - Zamfir Horia", 50);
     title2.setFillColor(sf::Color::White);
     title2.setPosition({230, 190});
     sf::Text play(font, "PLAY", 50);
-    play.setFillColor(sf::Color::Yellow);
+    play.setFillColor(sf::Color::Black);
     play.setPosition({580, 300});
     sf::Text exit(font, "EXIT", 35);
     exit.setFillColor(sf::Color::White);
@@ -58,11 +62,11 @@ void Menu::moveUp() {
     if (selectedItemIndex - 1 == 2) {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
         selectedItemIndex--;
-        texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
+        texts[selectedItemIndex].setFillColor(sf::Color::Black);
     } else {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
         selectedItemIndex = 3;
-        texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
+        texts[selectedItemIndex].setFillColor(sf::Color::Black);
     }
 }
 
@@ -70,11 +74,11 @@ void Menu::moveSongUp() {
     if (selectedSongIndex - 1 >= 0) {
         songs[selectedSongIndex].setFillColor(sf::Color::White);
         selectedSongIndex--;
-        songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+        songs[selectedSongIndex].setFillColor(sf::Color::Black);
     } else {
         songs[selectedSongIndex].setFillColor(sf::Color::White);
         selectedSongIndex = 1;
-        songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+        songs[selectedSongIndex].setFillColor(sf::Color::Black);
     }
 }
 
@@ -95,11 +99,11 @@ void Menu::moveDown() {
     if (selectedItemIndex + 1 == 4) {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
         selectedItemIndex = 2;
-        texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
+        texts[selectedItemIndex].setFillColor(sf::Color::Black);
     } else {
         texts[selectedItemIndex].setFillColor(sf::Color::White);
         selectedItemIndex = 3;
-        texts[selectedItemIndex].setFillColor(sf::Color::Yellow);
+        texts[selectedItemIndex].setFillColor(sf::Color::Black);
     }
 }
 
@@ -107,11 +111,11 @@ void Menu::moveSongDown() {
     if (selectedSongIndex + 1 < songs.size()) {
         songs[selectedSongIndex].setFillColor(sf::Color::White);
         selectedSongIndex++;
-        songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+        songs[selectedSongIndex].setFillColor(sf::Color::Black);
     } else {
         songs[selectedSongIndex].setFillColor(sf::Color::White);
         selectedSongIndex = 0;
-        songs[selectedSongIndex].setFillColor(sf::Color::Cyan);
+        songs[selectedSongIndex].setFillColor(sf::Color::Black);
     }
 }
 
@@ -193,8 +197,10 @@ bool Menu::runMenuLoop() {
             }
         }
         window.clear(sf::Color(20, 20, 20));
+        window.draw(*menuBackground);
         for (auto& item : texts)
             window.draw(item);
+
         window.display();
     }
 
@@ -223,8 +229,10 @@ void Menu::runSongSelectMenuLoop() {
             }
         }
         window.clear(sf::Color(20, 20, 20));
+        window.draw(*menuBackground);
         for (auto& item : songs)
             window.draw(item);
+
         window.display();
     }
 }
@@ -327,7 +335,7 @@ void Menu::runGameplayLoop(int songIndex) {
         perfect.setString(aux);
 
         if (isPaused) {
-            sf::RectangleShape dimOverlay({1500.f, 600.f});
+            sf::RectangleShape dimOverlay({1300.f, 600.f});
             dimOverlay.setFillColor(sf::Color(0, 0, 0, 150));
             window.draw(dimOverlay);
 

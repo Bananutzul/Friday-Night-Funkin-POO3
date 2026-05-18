@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 #include "GameManager.h"
 #include "Chart.h"
@@ -24,6 +25,9 @@ private:
 
     vector<sf::Text> pauseOptions;
     int selectedPauseIndex;
+
+    sf::Texture menuTexture;
+    unique_ptr<sf::Sprite> menuBackground;
 
     bool runMenuLoop();
     void runSongSelectMenuLoop();

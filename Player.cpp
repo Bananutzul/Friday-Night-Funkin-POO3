@@ -24,7 +24,7 @@ Player::Player(sf::Texture& texture) : sprite(texture){
     };
 
     sprite.setTextureRect(idleFrames[0]);
-    sprite.setPosition({550.f, 400.f});
+    sprite.setPosition({850.f, 400.f});
 }
 
 void Player::setState(PlayerState new_state) {

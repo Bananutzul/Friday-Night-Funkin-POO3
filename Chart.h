@@ -21,6 +21,7 @@ private:
     string difficulty;
     float speedMultiplier;
     int bpm;
+    float lastNoteTime;
 public:
     Chart();
     Chart(const string& filename, string difficulty);
@@ -31,6 +32,7 @@ public:
     vector<Note> getOpponentNotes() const;
     float getSpeedMultiplier() const;
     int getBpm() const;
+    float getLastNoteTime() const;
 };
 
 

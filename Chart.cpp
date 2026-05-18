@@ -51,6 +51,10 @@ Chart::Chart(const string& filename, const string difficulty) {
         }
 
         this->difficulty = difficulty;
+
+        if (player_notes.empty() == false) {
+            lastNoteTime = player_notes.back().time + 5000.f;
+        }
     } catch (const InvalidOptionException& e) {
         cout << "ERROR: " << e.what() << '\n';
     }
@@ -64,6 +68,7 @@ Chart::Chart(const Chart& obj) {
     opponent_notes = obj.opponent_notes;
     speedMultiplier = obj.speedMultiplier;
     bpm = obj.bpm;
+    lastNoteTime = obj.lastNoteTime;
 
     difficulty = obj.difficulty;
 }
@@ -79,6 +84,7 @@ Chart& Chart::operator=(const Chart& obj) {
     opponent_notes = obj.opponent_notes;
     speedMultiplier = obj.speedMultiplier;
     bpm = obj.bpm;
+    lastNoteTime = obj.lastNoteTime;
 
     difficulty = obj.difficulty;
 
@@ -99,6 +105,10 @@ float Chart::getSpeedMultiplier() const {
 
 int Chart::getBpm() const {
     return bpm;
+}
+
+float Chart::getLastNoteTime() const {
+    return lastNoteTime;
 }
 
 

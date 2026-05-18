@@ -198,6 +198,9 @@ bool Menu::runMenuLoop() {
         }
         window.clear(sf::Color(20, 20, 20));
         window.draw(*menuBackground);
+        sf::RectangleShape dimOverlay({1300.f, 600.f});
+        dimOverlay.setFillColor(sf::Color(0, 0, 0, 150));
+        window.draw(dimOverlay);
         for (auto& item : texts)
             window.draw(item);
 
@@ -230,6 +233,9 @@ void Menu::runSongSelectMenuLoop() {
         }
         window.clear(sf::Color(20, 20, 20));
         window.draw(*menuBackground);
+        sf::RectangleShape dimOverlay({1300.f, 600.f});
+        dimOverlay.setFillColor(sf::Color(0, 0, 0, 150));
+        window.draw(dimOverlay);
         for (auto& item : songs)
             window.draw(item);
 
@@ -317,6 +323,9 @@ void Menu::runGameplayLoop(int songIndex) {
             gm->handleHeldInput();
             gm->spawnNotes();
             gm->update(dt);
+
+            if (gm->getCurrTime() >= gm->getLastNoteTime())
+                return;
         }
 
         window.clear(sf::Color::Black);

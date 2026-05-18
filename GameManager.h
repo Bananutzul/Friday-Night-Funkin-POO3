@@ -40,6 +40,7 @@ private:
     float gameTimeMs = 0.f;
     float introDurationMs = 0.f;
     bool songStarted = false;
+    bool songFinished = false;
     sf::SoundBuffer buf3, buf2, buf1, bufGo;
     sf::Sound* sound3 = nullptr, *sound2 = nullptr, *sound1 = nullptr, *soundGo = nullptr;
     bool played1 = false, played2 = false, played3 = false, playedGo = false, countdown_finished = false;
@@ -93,6 +94,9 @@ public:
     void stopMusic();
 
     bool getCountdownFinished() const;
+    bool getSongFinished() const;
+    float getCurrTime() const;
+    float getLastNoteTime() const;
 
     template<typename T>
     void updateNotes(vector<unique_ptr<T>>& notes, float dt) {

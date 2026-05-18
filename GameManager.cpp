@@ -534,3 +534,15 @@ void GameManager::stopMusic() {
 bool GameManager::getCountdownFinished() const {
     return countdown_finished;
 }
+
+bool GameManager::getSongFinished() const {
+    return songFinished;
+}
+
+float GameManager::getCurrTime() const {
+    return curr_song->getTimeMs();
+}
+
+float GameManager::getLastNoteTime() const {
+    return curr_song->getChart().getLastNoteTime();
+}

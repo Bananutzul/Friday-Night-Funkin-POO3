@@ -11,8 +11,7 @@ Opp::Opp(sf::Texture& texture) : sprite(texture) {
         sf::IntRect({916, 200}, {438, 780})
     };
 
-    hitFrames = {
-        sf::IntRect({80, 1250}, {430, 780})};
+    hitFrames = {sf::IntRect({80, 1250}, {430, 780})};
 
     sprite.setTextureRect(idleFrames[0]);
     sprite.setPosition({250.f, 250.f});

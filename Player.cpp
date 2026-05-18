@@ -19,8 +19,7 @@ Player::Player(sf::Texture& texture) : sprite(texture){
     };
 
     hitFrames = {
-        sf::IntRect({1210, 10}, {380, 380}),
-        sf::IntRect({1610, 10}, {380, 380})
+        sf::IntRect({1230, 10}, {370, 380})
     };
 
     sprite.setTextureRect(idleFrames[0]);
@@ -50,13 +49,14 @@ void Player::update(float dt) {
         curr_frame++;
 
         if (curr_frame >= activeFrames->size()) {
-            if (curr_state == PlayerState::IDLE)
-                curr_frame = 0;
-            else {
-                curr_state = PlayerState::IDLE;
-                curr_frame = 0;
-                activeFrames = &idleFrames;
-            }
+            // if (curr_state == PlayerState::IDLE)
+            //     curr_frame = 0;
+            // else {
+            //     curr_state = PlayerState::IDLE;
+            //     curr_frame = 0;
+            //     activeFrames = &idleFrames;
+            // }
+            curr_frame = 0;
         }
 
         sprite.setTextureRect((*activeFrames)[curr_frame]);

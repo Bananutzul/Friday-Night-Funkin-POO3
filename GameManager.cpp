@@ -126,17 +126,21 @@ void GameManager::handleInput(sf::Event event) {
             case sf::Keyboard::Key::A:
             case sf::Keyboard::Key::Left:
                 dir = Direction::LEFT;
+                player->setState(PlayerState::HIT);
                 break;
             case sf::Keyboard::Key::S:
             case sf::Keyboard::Key::Down:
                 dir = Direction::DOWN;
+                player->setState(PlayerState::HIT);
                 break;
             case sf::Keyboard::Key::D:
             case sf::Keyboard::Key::Right:
                 dir = Direction::RIGHT;
+                player->setState(PlayerState::HIT);
                 break;
             case sf::Keyboard::Key::W:
             case sf::Keyboard::Key::Up:
+                player->setState(PlayerState::HIT);
                 dir = Direction::UP;
                 break;
             default:
@@ -181,6 +185,7 @@ void GameManager::handleInput(sf::Event event) {
             hasReleasedDir[(int)dir]= true;
             perfect = "";
             targetZones[(int)dir].setState(targetState::IDLE);
+            player->setState(PlayerState::IDLE);
         }
     }
 }

@@ -221,6 +221,10 @@ void GameManager::update(float dt) {
         player->update(dt);
     }
 
+    if (opp) {
+        opp->update(dt);
+    }
+
     updateNotes(player_arrows, dt);
     updateNotes(player_holdarrows, dt);
     updateNotes(opponent_arrows, dt);
@@ -265,6 +269,7 @@ void GameManager::update(float dt) {
             targetZones[(int)dir + 4].setState(targetState::HIT);
             note->setIsVisible(false);
             justPressed[(int)dir] = true;
+            opp->setState(Opp_State::HIT);
         }
     }
 
@@ -276,6 +281,7 @@ void GameManager::update(float dt) {
             note->setIsVisible(false);
             note->setIsHeld(true);
             justPressed[(int)dir] = true;
+            opp->setState(Opp_State::HIT);
         }
     }
 
@@ -341,6 +347,10 @@ void GameManager::draw(sf::RenderWindow& window) {
 
     if (player) {
         player->draw(window);
+    }
+
+    if (opp) {
+        opp->draw(window);
     }
 
     for (auto& note : player_arrows)
@@ -458,6 +468,12 @@ void GameManager::preloadTextures() {
         player = std::make_unique<Player>(playerTexture);
     } else {
         cout << "Eroare la incarcarea sprite sheet-ului pt player!\n";
+    }
+
+    if (oppTexture.loadFromFile("dad.png")) {
+        opp = std::make_unique<Opp>(oppTexture);
+    } else {
+        cout << "Eroare la incarcarea sprite sheet-ului pt inamic!\n";
     }
 
     if (backgroundTexture1.loadFromFile("stageback.png")) {

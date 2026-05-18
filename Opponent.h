@@ -15,9 +15,10 @@ private:
     vector<sf::IntRect> idleFrames;
     vector<sf::IntRect> hitFrames;
 
-    float frameDuration = 0.12f;
+    float frameDuration = 0.16f;
     float frameTimer = 0.f;
     int curr_frame = 0;
+    Opp_State curr_state;
 public:
     Opp(sf::Texture& texture);
 

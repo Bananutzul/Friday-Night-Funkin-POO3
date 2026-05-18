@@ -13,6 +13,7 @@
 #include "HoldArrow.h"
 #include "Player.h"
 #include "HitSplash.h"
+#include "Opponent.h"
 
 using namespace std;
 
@@ -54,6 +55,8 @@ private:
 
     sf::Texture playerTexture;
     unique_ptr<Player> player;
+    sf::Texture oppTexture;
+    unique_ptr<Opp> opp;
 
     sf::Texture backgroundTexture1;
     sf::Texture backgroundTexture2;

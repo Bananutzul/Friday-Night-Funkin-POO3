@@ -10,7 +10,7 @@ Player::Player(sf::Texture& texture) : sprite(texture){
 
     idleFrames = {
         sf::IntRect({10, 10}, {390, 390}),
-        sf::IntRect({410, 10}, {390, 390}),
+        sf::IntRect({400, 10}, {390, 390}),
         sf::IntRect({810, 10}, {390, 390})
     };
 
@@ -24,7 +24,7 @@ Player::Player(sf::Texture& texture) : sprite(texture){
     };
 
     sprite.setTextureRect(idleFrames[0]);
-    sprite.setPosition({850.f, 400.f});
+    sprite.setPosition({900.f, 400.f});
 }
 
 void Player::setState(PlayerState new_state) {

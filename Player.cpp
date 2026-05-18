@@ -15,10 +15,12 @@ Player::Player(sf::Texture& texture) : sprite(texture){
     };
 
     missFrames = {
+        sf::IntRect({10, 410}, {390, 390}),
         sf::IntRect({10, 410}, {390, 390})
     };
 
     hitFrames = {
+        sf::IntRect({1230, 10}, {370, 380}),
         sf::IntRect({1230, 10}, {370, 380})
     };
 

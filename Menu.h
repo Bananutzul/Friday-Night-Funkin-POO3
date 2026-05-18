@@ -29,6 +29,11 @@ private:
     sf::Texture menuTexture;
     unique_ptr<sf::Sprite> menuBackground;
 
+    unique_ptr<sf::Text> high_score1;
+    int high_score_nr1 = 0;
+    unique_ptr<sf::Text> high_score2;
+    int high_score_nr2 = 0;
+
     bool runMenuLoop();
     void runSongSelectMenuLoop();
     void runGameplayLoop(int songIndex);
@@ -42,6 +47,8 @@ private:
     void handleInput(sf::Event event);
     void handleInputSong(sf::Event event);
     void handleInputPause(sf::Event event);
+    void loadScoreFromFile(int idx);
+    void saveScoreToFile(int idx, int score);
 public:
     Menu();
 

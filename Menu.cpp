@@ -6,6 +6,9 @@
 #include <vector>
 #include "GameManager.h"
 #include "Chart.h"
+#include <fstream>
+
+using namespace std;
 
 Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
     window.setFramerateLimit(60);
@@ -26,6 +29,16 @@ Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
     song2.setPosition({550, 300});
     song1.setFillColor(sf::Color::Black);
     song2.setFillColor(sf::Color::White);
+
+    loadScoreFromFile(1);
+
+    high_score1 = make_unique<sf::Text>(font, "HIGH SCORE SONG 1:" + to_string(high_score_nr1), 25);
+    high_score1->setPosition({20, 450});
+    high_score1->setFillColor(sf::Color::White);
+
+    high_score2 = make_unique<sf::Text>(font, "HIGH SCORE SONG 2:" + to_string(high_score_nr2), 25);
+    high_score2->setPosition({20, 520});
+    high_score2->setFillColor(sf::Color::White);
 
     songs.push_back(song1);
     songs.push_back(song2);
@@ -236,8 +249,18 @@ void Menu::runSongSelectMenuLoop() {
         sf::RectangleShape dimOverlay({1300.f, 600.f});
         dimOverlay.setFillColor(sf::Color(0, 0, 0, 150));
         window.draw(dimOverlay);
+
         for (auto& item : songs)
             window.draw(item);
+
+        loadScoreFromFile(1);
+        loadScoreFromFile(2);
+
+        high_score1->setString("HIGHSCORE SONG 1: " + to_string(high_score_nr1));
+        high_score2->setString("HIGHSCORE SONG 2: " + to_string(high_score_nr2));
+
+        window.draw(*high_score1);
+        window.draw(*high_score2);
 
         window.display();
     }
@@ -248,6 +271,8 @@ void Menu::runGameplayLoop(int songIndex) {
     GameManager* gm = GameManager::getInstance();
     gm->preloadTextures();
     gm->loadTargetZones();
+    gm->setScore();
+    gm->setMisses();
 
     unique_ptr<Chart> chart;
 
@@ -325,7 +350,11 @@ void Menu::runGameplayLoop(int songIndex) {
 
         if (gm->getCurrTime() >= gm->getLastNoteTime() - 2500.f) {
             isFading = true;
-            cout << "Song finished!";
+
+            if (songIndex == 1) {
+                saveScoreToFile(1, gm->getScore());
+            }else
+                saveScoreToFile(2, gm->getScore());
         }
 
         if (!isPaused) {
@@ -393,3 +422,64 @@ void Menu::runMenu() {
         else break;
     }
 }
+
+void Menu::loadScoreFromFile(int idx) {
+    if (idx == 1) {
+        ifstream fin("highscore.txt");
+
+        string temp;
+
+        fin >> temp;
+
+        if (stoi(temp) >= high_score_nr1)
+            high_score_nr1 = stoi(temp);
+
+        fin.close();
+    }else if (idx == 2) {
+        ifstream fin("highscore1.txt");
+
+        string temp;
+
+        fin >> temp;
+
+        if (stoi(temp) > high_score_nr2)
+            high_score_nr2 = stoi(temp);
+
+        fin.close();
+    }
+}
+
+void Menu::saveScoreToFile(int idx, int score) {
+    if (idx == 1) {
+        ifstream fin("highscore.txt");
+
+        string temp;
+
+        fin >> temp;
+
+        if (score > stoi(temp)) {
+            fin.close();
+            ofstream fout("highscore.txt");
+            fout << score;
+            fout.close();
+        }
+
+        fin.close();
+    }else if (idx == 2) {
+        ifstream fin("highscore1.txt");
+
+        string temp;
+
+        fin >> temp;
+
+        if (score > stoi(temp)) {
+            fin.close();
+            ofstream fout("highscore1.txt");
+            fout << score;
+            fout.close();
+        }
+
+        fin.close();
+    }
+}
+

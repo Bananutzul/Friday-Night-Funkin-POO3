@@ -86,6 +86,8 @@ public:
     string getPerfect() const;
     int getCombo() const;
     int getMisses() const;
+    void setScore() {score = 0;};
+    void setMisses() {misses = 0;};
     map<string, sf::Texture> getTexture() const;
 
     void preloadTextures();

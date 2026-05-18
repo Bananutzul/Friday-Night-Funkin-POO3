@@ -323,14 +323,15 @@ void Menu::runGameplayLoop(int songIndex) {
                 handleInputPause(*event);
         }
 
+        if (gm->getCurrTime() >= gm->getLastNoteTime() - 2500.f) {
+            isFading = true;
+            cout << "Song finished!";
+        }
+
         if (!isPaused) {
             gm->handleHeldInput();
             gm->spawnNotes();
             gm->update(dt);
-
-            if (gm->getCurrTime() >= gm->getLastNoteTime()) {
-                isFading = true;
-            }
 
             if (fadeTimer >= fadeDuration)
                 return;

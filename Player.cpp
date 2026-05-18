@@ -56,7 +56,12 @@ void Player::update(float dt) {
             //     curr_frame = 0;
             //     activeFrames = &idleFrames;
             // }
-            curr_frame = 0;
+            if (curr_state == PlayerState::MISS) {
+                curr_frame = 0;
+                curr_state = PlayerState::IDLE;
+                activeFrames = &idleFrames;
+            }else
+                curr_frame = 0;
         }
 
         sprite.setTextureRect((*activeFrames)[curr_frame]);

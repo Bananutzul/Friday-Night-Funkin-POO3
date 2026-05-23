@@ -557,7 +557,7 @@ bool GameManager::getCountdownFinished() const {
 }
 
 bool GameManager::getSongFinished() const {
-    return songFinished;
+    return curr_song->finished();
 }
 
 float GameManager::getCurrTime() const {

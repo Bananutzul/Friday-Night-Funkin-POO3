@@ -25,6 +25,7 @@ public:
     string getName() const;
     float getSpeedMultiplier() const;
     int getBpm() const;
+    bool finished();
 
     void pause();
 };

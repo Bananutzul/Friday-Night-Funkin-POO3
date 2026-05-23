@@ -33,6 +33,8 @@ private:
     int high_score_nr1 = 0;
     unique_ptr<sf::Text> high_score2;
     int high_score_nr2 = 0;
+    unique_ptr<sf::Text> high_score3;
+    int high_score_nr3 = 0;
 
     bool runMenuLoop();
     void runSongSelectMenuLoop();

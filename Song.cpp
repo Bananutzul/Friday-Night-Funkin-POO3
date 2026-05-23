@@ -72,3 +72,8 @@ float Song::getSpeedMultiplier() const {
 int Song::getBpm() const {
     return chart.getBpm();
 }
+
+bool Song::finished() {
+    return instrumental.getStatus() == sf::SoundSource::Status::Stopped;
+}
+

@@ -24,24 +24,29 @@ Menu::Menu() : window(sf::VideoMode({1500, 600}), "FNF") {
 
     songFiles = {"dadbattle-chart.json", "bopeebo-chart.json"};
 
-    sf::Text song1(font, "SONG 1", 60), song2(font, "SONG 2", 60);
+    sf::Text song1(font, "SONG 1", 60), song2(font, "SONG 2", 60), song3(font, "SONG 3", 60);
     song1.setPosition({550, 200});
     song2.setPosition({550, 300});
+    song3.setPosition({550, 400});
     song1.setFillColor(sf::Color::Black);
     song2.setFillColor(sf::Color::White);
-
-    loadScoreFromFile(1);
+    song3.setFillColor(sf::Color::White);
 
     high_score1 = make_unique<sf::Text>(font, "HIGH SCORE SONG 1:" + to_string(high_score_nr1), 25);
-    high_score1->setPosition({20, 450});
+    high_score1->setPosition({20, 350});
     high_score1->setFillColor(sf::Color::White);
 
     high_score2 = make_unique<sf::Text>(font, "HIGH SCORE SONG 2:" + to_string(high_score_nr2), 25);
-    high_score2->setPosition({20, 520});
+    high_score2->setPosition({20, 420});
     high_score2->setFillColor(sf::Color::White);
+
+    high_score3 = make_unique<sf::Text>(font, "HIGH SCORE SONG 2:" + to_string(high_score_nr2), 25);
+    high_score3->setPosition({20, 490});
+    high_score3->setFillColor(sf::Color::White);
 
     songs.push_back(song1);
     songs.push_back(song2);
+    songs.push_back(song3);
 
     sf::Text title1(font, "FRIDAY NIGHT FUNKIN'", 90);
     title1.setFillColor(sf::Color::Black);
@@ -85,12 +90,12 @@ void Menu::moveUp() {
 
 void Menu::moveSongUp() {
     if (selectedSongIndex - 1 >= 0) {
-        songs[selectedSongIndex].setFillColor(sf::Color::White);
+        songs[selectedSongIndex].setFillColor(sf::Color::White);//0 1 2
         selectedSongIndex--;
         songs[selectedSongIndex].setFillColor(sf::Color::Black);
     } else {
         songs[selectedSongIndex].setFillColor(sf::Color::White);
-        selectedSongIndex = 1;
+        selectedSongIndex = 2;
         songs[selectedSongIndex].setFillColor(sf::Color::Black);
     }
 }
@@ -237,10 +242,7 @@ void Menu::runSongSelectMenuLoop() {
                     return;
 
                 if (keyEvent->code == sf::Keyboard::Key::Enter) {
-                    if (selectedSongIndex == 0)
-                        runGameplayLoop(1);
-                    else runGameplayLoop(2);
-
+                    runGameplayLoop(selectedSongIndex + 1);
                 }
             }
         }
@@ -255,12 +257,15 @@ void Menu::runSongSelectMenuLoop() {
 
         loadScoreFromFile(1);
         loadScoreFromFile(2);
+        loadScoreFromFile(3);
 
         high_score1->setString("HIGHSCORE SONG 1: " + to_string(high_score_nr1));
         high_score2->setString("HIGHSCORE SONG 2: " + to_string(high_score_nr2));
+        high_score3->setString("HIGHSCORE SONG 3: " + to_string(high_score_nr3));
 
         window.draw(*high_score1);
         window.draw(*high_score2);
+        window.draw(*high_score3);
 
         window.display();
     }
@@ -276,17 +281,21 @@ void Menu::runGameplayLoop(int songIndex) {
 
     unique_ptr<Chart> chart;
 
-    if (songIndex == 2)
-        chart = make_unique<Chart>("dadbattle-chart.json", "hard"), cout << 2;
+    if (songIndex == 3)
+        chart = make_unique<Chart>("dadbattle-chart.json", "hard");
+    else if (songIndex == 1)
+        chart = make_unique<Chart>("bopeebo-chart.json", "hard");
     else
-        chart = make_unique<Chart>("bopeebo-chart.json", "hard"), cout << 1;
+        chart = make_unique<Chart>("fresh-chart.json", "hard");
 
     unique_ptr<Song> song;
 
-    if (songIndex == 2)
+    if (songIndex == 3)
         song = make_unique<Song>("Dad Battle", "Inst2.ogg", "Voices-bf2.ogg", "Voices-dad2.ogg", *chart);
-    else
+    else if (songIndex == 1)
         song = make_unique<Song>("Bopeebo", "Inst.ogg", "Voices-bf.ogg", "Voices-dad.ogg", *chart);
+    else
+        song = make_unique<Song>("Fresh", "Instfresh.ogg", "Voices-bffresh.ogg", "Voices-dadfresh.ogg", *chart);
 
     gm->loadSong(move(song));
 
@@ -348,13 +357,12 @@ void Menu::runGameplayLoop(int songIndex) {
                 handleInputPause(*event);
         }
 
-        if (gm->getCurrTime() >= gm->getLastNoteTime() - 2500.f) {
+        if ((gm->getCurrTime() >= gm->getLastNoteTime() - 2500.f) ||
+            (gm->getSongFinished() == true && !isPaused && gm->getCurrTime() >= 15000)) {
+
             isFading = true;
 
-            if (songIndex == 1) {
-                saveScoreToFile(1, gm->getScore());
-            }else
-                saveScoreToFile(2, gm->getScore());
+            saveScoreToFile(songIndex, gm->getScore());
         }
 
         if (!isPaused) {
@@ -446,6 +454,17 @@ void Menu::loadScoreFromFile(int idx) {
             high_score_nr2 = stoi(temp);
 
         fin.close();
+    }else if (idx == 3) {
+        ifstream fin("highscore2.txt");
+
+        string temp;
+
+        fin >> temp;
+
+        if (stoi(temp) > high_score_nr3)
+            high_score_nr3 = stoi(temp);
+
+        fin.close();
     }
 }
 
@@ -475,6 +494,21 @@ void Menu::saveScoreToFile(int idx, int score) {
         if (score > stoi(temp)) {
             fin.close();
             ofstream fout("highscore1.txt");
+            fout << score;
+            fout.close();
+        }
+
+        fin.close();
+    }else if (idx == 3) {
+        ifstream fin("highscore2.txt");
+
+        string temp;
+
+        fin >> temp;
+
+        if (score > stoi(temp)) {
+            fin.close();
+            ofstream fout("highscore2.txt");
             fout << score;
             fout.close();
         }
